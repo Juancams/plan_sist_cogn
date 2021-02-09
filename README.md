@@ -17,4 +17,4 @@ En este repositorio se subirán los ejercicios propuestos en clase.
 * Isabel Cebollada Gracia - @isacg5
 * Noel Jimenez Garcia - @noel215
 
-![alt text](https://github.com/Juancams/plan_sist_cogn/blob/master/resources/ros2.png)
+![alt text](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/ros2.png)
