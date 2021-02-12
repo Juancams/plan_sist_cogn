@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(scan_fake)
 
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE DEBUG)
 
 find_package(ament_cmake REQUIRED)
@@ -18,11 +17,12 @@ if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
 endif()
 
-add_executable(practica_1 src/practica_1.cpp)
-ament_target_dependencies(practica_1 ${dependencies})
+add_executable(proceso_1 src/proceso_1.cpp)
+ament_target_dependencies(proceso_1 ${dependencies})
+
 
 install(TARGETS
-  practica_1
+  proceso_1
 
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
