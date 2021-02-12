@@ -1,4 +1,4 @@
-# Copyright 2020 The Reboteers
+# Copyright 2021 The Reboteers
 
 from launch import LaunchDescription
 from launch.actions import SetEnvironmentVariable
@@ -10,12 +10,12 @@ def generate_launch_description():
 
     practica_1_cmd = Node(
         package='scan_fake',
-        node_executable='practica_1',
+        node_executable='proceso_1',
         output='screen',
         parameters=[])
 
     ld = LaunchDescription()
     ld.add_action(stdout_linebuf_envvar)
-    ld.add_action(practica_1_cmd)
+    ld.add_action(proceso_1_cmd)
 
     return ld
