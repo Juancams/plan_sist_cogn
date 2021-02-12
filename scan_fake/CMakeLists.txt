@@ -17,12 +17,12 @@ if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
 endif()
 
-add_executable(proceso_1 src/proceso_1.cpp)
-ament_target_dependencies(proceso_1 ${dependencies})
+add_executable(proceso src/proceso.cpp)
+ament_target_dependencies(proceso ${dependencies})
 
 
 install(TARGETS
-  proceso_1
+  proceso
 
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

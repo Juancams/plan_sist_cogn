@@ -1,4 +1,4 @@
-// Copyright 2021 The Reboteers
+// Copyright 2021 The Rebooters
 
 #include "rclcpp/rclcpp.hpp"
 

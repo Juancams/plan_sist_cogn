@@ -1,4 +1,4 @@
-# Copyright 2021 The Reboteers
+# Copyright 2021 The Rebooters
 
 from launch import LaunchDescription
 from launch.actions import SetEnvironmentVariable
@@ -8,14 +8,14 @@ def generate_launch_description():
 
     stdout_linebuf_envvar = SetEnvironmentVariable('RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1')
 
-    practica_1_cmd = Node(
+    proceso_cmd = Node(
         package='scan_fake',
-        node_executable='proceso_1',
+        node_executable='proceso',
         output='screen',
         parameters=[])
 
     ld = LaunchDescription()
     ld.add_action(stdout_linebuf_envvar)
-    ld.add_action(proceso_1_cmd)
+    ld.add_action(proceso_cmd)
 
     return ld
