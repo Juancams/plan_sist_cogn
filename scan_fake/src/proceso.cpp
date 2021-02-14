@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <memory>
 #include <iostream>
 #include <string>
 #include <random>
@@ -29,7 +30,7 @@ public:
     // Max angle, min angle, increment of the scan and resize ranges
     scan.angle_min = angle_min;
     scan.angle_max = angle_max;
-    scan.angle_increment = (angle_max-angle_min)*(M_PI/180);
+    scan.angle_increment = (angle_max - angle_min) * (M_PI / 180);
     scan.ranges.resize(n_readings);
 
     // Publisher and timer
@@ -40,7 +41,6 @@ public:
   }
 
 private:
-
   void generate_scan_fake()
   {
     // Normal distribution and random number generator
@@ -53,25 +53,25 @@ private:
 
     // Generate 100 random readings avoiding negative values
     int reads = 0;
-    while (reads < n_readings)
-    {
+    while (reads < n_readings) {
       // Random reading
       float value = distribution(generator);
-      if (value > 0)
-      {
+      if (value > 0) {
         // Include reading in the scan
         scan.ranges[reads] = value;
         reads++;
 
         // Update min and max value
-        if (value > max_value)
+        if (value > max_value) {
           max_value = value;
+        }
 
-        if (value < min_value)
+        if (value < min_value) {
           min_value = value;
+        }
       }
     }
-    
+
     // Set min and max values of the scan
     scan.range_min = min_value;
     scan.range_max = max_value;
@@ -94,7 +94,7 @@ private:
   // Scan msg and parameters
   sensor_msgs::msg::LaserScan scan;
   const int angle_min = 0;
-  const int angle_max = 2*M_PI;
+  const int angle_max = 2 * M_PI;
   const int n_readings = 100;
 
   // Normal distribution parameters
