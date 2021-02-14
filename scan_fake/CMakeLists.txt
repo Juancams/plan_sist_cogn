@@ -5,9 +5,11 @@ set(CMAKE_BUILD_TYPE DEBUG)
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 set(dependencies
     rclcpp
+    sensor_msgs
 )
 
 if(BUILD_TESTING)
