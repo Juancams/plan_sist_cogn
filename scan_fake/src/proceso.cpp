@@ -21,6 +21,7 @@
 #include "sensor_msgs/msg/laser_scan.hpp"
 
 using namespace std::chrono_literals;
+using std::placeholders::_1;
 
 class ScanFakePublisher : public rclcpp::Node
 {
@@ -91,15 +92,65 @@ private:
   const float standard_deviation = 1.0;
 };
 
+class ScanFakeSubscriber : public rclcpp::Node
+{
+public:
+  explicit ScanFakeSubscriber(const std::string & name)
+  : Node(name)
+  {
+    // Subscriber
+    sub = create_subscription<sensor_msgs::msg::LaserScan>(
+      "scan_fake", rclcpp::SensorDataQoS(),
+      std::bind(&ScanFakeSubscriber::scan_callback, this, _1));
+  }
+
+private:
+  void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan)
+  {
+    // Initialize min and max values
+    min_value = scan->range_max;
+    max_value = scan->range_min;
+    int n_readings = (scan->angle_max - scan->angle_min) / scan->angle_increment;
+    float value_sum = 0.0;
+
+    // Loop for checking every value in the scan ranges
+    for (int n = 0; n < n_readings; n++) {
+      if (scan->ranges[n] > max_value) {  // Compare if it is the maximum value
+        max_value = scan->ranges[n];
+      } else if (scan->ranges[n] < min_value) {  // Compare if it is the minimum value
+        min_value = scan->ranges[n];
+      }
+      // Sum of all values
+      value_sum += scan->ranges[n];
+    }
+    // Result of the mean
+    average = value_sum / n_readings;
+
+    // Show minimum, maximum and mean
+    RCLCPP_INFO(
+      get_logger(),
+      "The min value is: [%f] | The max value is: [%f] | The mean is: [%f] ",
+      min_value, max_value, average);
+  }
+
+private:
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub;
+  float min_value = 0.0;
+  float max_value = 0.0;
+  float average = 0.0;
+};
+
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
   auto node_A = std::make_shared<ScanFakePublisher>("node_A");
+  auto node_B = std::make_shared<ScanFakeSubscriber>("node_B");
 
   rclcpp::executors::MultiThreadedExecutor exec;
-  exec.add_node(node_A);
 
+  exec.add_node(node_A);
+  exec.add_node(node_B);
   exec.spin();
 
   rclcpp::shutdown();
