@@ -30,7 +30,7 @@ public:
     // Max angle, min angle, increment of the scan and resize ranges
     scan.angle_min = angle_min;
     scan.angle_max = angle_max;
-    scan.angle_increment = ((angle_max - angle_min) * (180 / M_PI)) / n_readings;
+    scan.angle_increment = (angle_max - angle_min) / n_readings;
     scan.ranges.resize(n_readings);
 
     // Publisher and timer
@@ -93,8 +93,8 @@ private:
 
   // Scan msg and parameters
   sensor_msgs::msg::LaserScan scan;
-  const int angle_min = 0;
-  const int angle_max = 2 * M_PI;
+  const float angle_min = 0;
+  const float angle_max = 2 * M_PI;
   const int n_readings = 100;
 
   // Normal distribution parameters
