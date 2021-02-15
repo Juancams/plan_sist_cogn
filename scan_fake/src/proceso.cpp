@@ -33,6 +33,10 @@ public:
     scan.angle_increment = (angle_max - angle_min) / n_readings;
     scan.ranges.resize(n_readings);
 
+    // Set min and max values of the scan
+    scan.range_min = min_value;
+    scan.range_max = max_value;
+
     // Publisher and timer
     pub = create_publisher<sensor_msgs::msg::LaserScan>(
       "scan_fake", rclcpp::QoS(10).best_effort());
@@ -48,33 +52,17 @@ private:
     generator.seed(time(NULL));
     std::normal_distribution<float> distribution(mean, standard_deviation);
 
-    float max_value = mean;
-    float min_value = mean;
-
     // Generate 100 random readings avoiding negative values
     int reads = 0;
     while (reads < n_readings) {
       // Random reading
       float value = distribution(generator);
-      if (value > 0) {
+      if (value > scan.range_min && value < scan.range_max) {
         // Include reading in the scan
         scan.ranges[reads] = value;
         reads++;
-
-        // Update min and max value
-        if (value > max_value) {
-          max_value = value;
-        }
-
-        if (value < min_value) {
-          min_value = value;
-        }
       }
     }
-
-    // Set min and max values of the scan
-    scan.range_min = min_value;
-    scan.range_max = max_value;
   }
 
   void publish_scan_fake()
@@ -96,6 +84,8 @@ private:
   const float angle_min = 0;
   const float angle_max = 2 * M_PI;
   const int n_readings = 100;
+  const float max_value = 8.0;
+  const float min_value = 0.0;
 
   // Normal distribution parameters
   const float mean = 4.0;
