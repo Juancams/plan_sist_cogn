@@ -106,7 +106,7 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node_A = std::make_shared<ScanFakePublisher>("nodo_A");
+  auto node_A = std::make_shared<ScanFakePublisher>("node_A");
 
   rclcpp::executors::MultiThreadedExecutor exec;
   exec.add_node(node_A);
