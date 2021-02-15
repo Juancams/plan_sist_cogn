@@ -21,6 +21,7 @@
 #include "sensor_msgs/msg/laser_scan.hpp"
 
 using namespace std::chrono_literals;
+using std::placeholders::_1;
 
 class ScanFakePublisher : public rclcpp::Node
 {
@@ -91,15 +92,59 @@ private:
   const float standard_deviation = 1.0;
 };
 
+class ScanFakeSubscriber : public rclcpp::Node
+{
+public:
+  explicit ScanFakeSubscriber(const std::string & name)
+  : Node(name)
+  {
+    sub = create_subscription<sensor_msgs::msg::LaserScan>(
+      "scan_fake", rclcpp::SensorDataQoS(),
+      std::bind(&ScanFakeSubscriber::scan_callback, this, _1));
+  }
+
+private:
+  void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan)
+  {
+    min_value = scan->range_max;
+    max_value = scan->range_min;
+    float value_sum = 0;
+    for(int n = 0; n < n_readings; n++)
+    {
+      if(scan->ranges[n] > max_value)
+      {
+        max_value = scan->ranges[n];
+      }
+      else if(scan->ranges[n] < min_value)
+      {
+        min_value = scan->ranges[n];
+      }
+      value_sum += scan->ranges[n];
+    }
+    mean = value_sum / n_readings;
+    RCLCPP_INFO(get_logger(), 
+    "The min value is: [%f] | The max value is: [%f] | The mean is: [%f] ", 
+    min_value, max_value, mean);
+  }
+private:
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub;
+  float min_value = 0.0;
+  float max_value = 0.0;
+  float mean = 0.0;
+  const int n_readings = 100;
+};
+
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
   auto node_A = std::make_shared<ScanFakePublisher>("node_A");
+  auto node_B = std::make_shared<ScanFakeSubscriber>("node_B");
 
   rclcpp::executors::MultiThreadedExecutor exec;
-  exec.add_node(node_A);
 
+  exec.add_node(node_A);
+  exec.add_node(node_B);
   exec.spin();
 
   rclcpp::shutdown();
