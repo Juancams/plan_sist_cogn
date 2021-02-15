@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <memory>
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <random>
@@ -39,7 +40,7 @@ public:
 
     // Publisher and timer
     pub = create_publisher<sensor_msgs::msg::LaserScan>(
-      "scan_fake", rclcpp::QoS(10).best_effort());
+      "scan_fake", rclcpp::SensorDataQoS());
     timer = create_wall_timer(
       1s, std::bind(&ScanFakePublisher::publish_scan_fake, this));
   }
@@ -47,21 +48,15 @@ public:
 private:
   void generate_scan_fake()
   {
-    // Normal distribution and random number generator
-    std::default_random_engine generator;
+    // Normal distribution and generator seed
     generator.seed(time(NULL));
     std::normal_distribution<float> distribution(mean, standard_deviation);
 
-    // Generate 100 random readings avoiding negative values
-    int reads = 0;
-    while (reads < n_readings) {
-      // Random reading
-      float value = distribution(generator);
-      if (value > scan.range_min && value < scan.range_max) {
-        // Include reading in the scan
-        scan.ranges[reads] = value;
-        reads++;
-      }
+    // Generate 100 random readings between the minimum and maximum values
+    // and include them in the scan
+    for (int n = 0; n < n_readings; n++) {
+      float value = std::max(scan.range_min, std::min(scan.range_max, distribution(generator)));
+      scan.ranges[n] = value;
     }
   }
 
@@ -71,6 +66,7 @@ private:
     generate_scan_fake();
 
     // Publish scan
+    RCLCPP_INFO(get_logger(), "Publishing Scan");
     pub->publish(scan);
   }
 
@@ -81,11 +77,14 @@ private:
 
   // Scan msg and parameters
   sensor_msgs::msg::LaserScan scan;
-  const float angle_min = 0;
-  const float angle_max = 2 * M_PI;
+  const float angle_min = 0.0;
+  const float angle_max = 2.0 * M_PI;
   const int n_readings = 100;
   const float max_value = 8.0;
   const float min_value = 0.0;
+
+  // Random number generator
+  std::default_random_engine generator;
 
   // Normal distribution parameters
   const float mean = 4.0;
