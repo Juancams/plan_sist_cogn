@@ -110,7 +110,7 @@ private:
     // Initialize min and max values
     min_value = scan->range_max;
     max_value = scan->range_min;
-    int n_readings = scan->angle_max - scan->angle_min / scan->angle_increment;
+    int n_readings = (scan->angle_max - scan->angle_min) / scan->angle_increment;
     float value_sum = 0.0;
 
     // Loop for checking every value in the scan ranges
