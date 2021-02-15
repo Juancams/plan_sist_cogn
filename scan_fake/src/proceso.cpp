@@ -30,7 +30,7 @@ public:
     // Max angle, min angle, increment of the scan and resize ranges
     scan.angle_min = angle_min;
     scan.angle_max = angle_max;
-    scan.angle_increment = (angle_max - angle_min) * (M_PI / 180);
+    scan.angle_increment = ((angle_max - angle_min) * (180 / M_PI)) / n_readings;
     scan.ranges.resize(n_readings);
 
     // Publisher and timer
