@@ -28,17 +28,17 @@ namespace scan_fake
 class ScanFakeSubscriber : public rclcpp::Node
 {
 public:
-    explicit ScanFakeSubscriber(const std::string & name);
+  explicit ScanFakeSubscriber(const std::string & name);
 
 private:
-    void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan);
+  void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan);
 
 private:
-    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub;
-    float min_value = 0.0;
-    float max_value = 0.0;
-    float average = 0.0;
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub;
+  float min_value = 0.0;
+  float max_value = 0.0;
+  float average = 0.0;
 };
-} // namespace scan_fake
+}  // namespace scan_fake
 
-#endif // SCAN_FAKE__SCANFAKESUBSCRIBER_HPP_
+#endif  // SCAN_FAKE__SCANFAKESUBSCRIBER_HPP_
