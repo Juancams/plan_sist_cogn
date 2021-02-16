@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <memory>
 #include "scan_fake/ScanFakePublisher.hpp"
 #include "scan_fake/ScanFakeSubscriber.hpp"
-#include <memory>
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <random>
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 
