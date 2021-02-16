@@ -21,7 +21,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 
-namespace scan_fake 
+namespace scan_fake
 {
 using namespace std::chrono_literals;
 
@@ -69,4 +69,4 @@ void ScanFakePublisher::publish_scan_fake()
     pub->publish(scan);
 }
 
-} // namesàce scan_fake
+} // namespace scan_fake
