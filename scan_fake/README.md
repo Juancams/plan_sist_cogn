@@ -1,10 +1,4 @@
-# THE REBOOTERS
-
-_Planificación y Sistemas Cognitivos._
-
-_Ingeniería de Robótica Software 2020/2021._
-
-_Universidad Rey Juan Carlos, Fuenlabrada._
+# SCAN FAKE
 
 ## Description
 
@@ -18,9 +12,7 @@ There is also a subscriber node that shows the average, maximum and minimum valu
 In the following gif and video you can see the simulation on rviz2, the bandwidth and the frequency:
 
 [![Watch the video](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/image.jpeg)](https://youtu.be/DTf13k_ff3w)
+
+
 ![Demo](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/video_gif.gif?raw=true)
 
-
-<p align="center">
-  <img align="center" src="https://github.com/Juancams/plan_sist_cogn/blob/main/resources/ros2.png">
-</p>
