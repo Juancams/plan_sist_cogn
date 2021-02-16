@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "scan_fake/ScanFakePublisher.hpp"
-#include "scan_fake/ScanFakeSubscriber.hpp"
+#ifndef SCAN_FAKE__SCANFAKESUBSCRIBER_HPP_
+#define SCAN_FAKE__SCANFAKESUBSCRIBER_HPP_
+
 #include <memory>
 #include <algorithm>
 #include <iostream>
@@ -22,20 +23,22 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 
-int main(int argc, char * argv[])
+namespace scan_fake
 {
-  rclcpp::init(argc, argv);
+class ScanFakeSubscriber : public rclcpp::Node
+{
+public:
+    explicit ScanFakeSubscriber(const std::string & name);
 
-  auto node_A = std::make_shared<scan_fake::ScanFakePublisher>("node_A");
-  auto node_B = std::make_shared<scan_fake::ScanFakeSubscriber>("node_B");
+private:
+    void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan);
 
-  rclcpp::executors::MultiThreadedExecutor exec;
+private:
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub;
+    float min_value = 0.0;
+    float max_value = 0.0;
+    float average = 0.0;
+};
+} // namespace scan_fake
 
-  exec.add_node(node_A);
-  exec.add_node(node_B);
-  exec.spin();
-
-  rclcpp::shutdown();
-
-  return 0;
-}
+#endif // SCAN_FAKE__SCANFAKESUBSCRIBER_HPP_
