@@ -23,7 +23,7 @@ def generate_launch_description():
 
     proceso_cmd = Node(
         package='scan_fake',
-        node_executable='proceso',
+        executable='proceso',
         output='screen',
         parameters=[])
 

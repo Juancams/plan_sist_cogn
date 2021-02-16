@@ -20,7 +20,7 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-add_executable(proceso 
+add_executable(proceso
   src/proceso.cpp
 )
 
