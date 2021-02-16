@@ -1,10 +1,4 @@
-# THE REBOOTERS
-
-_Planificación y Sistemas Cognitivos._
-
-_Ingeniería de Robótica Software 2020/2021._
-
-_Universidad Rey Juan Carlos, Fuenlabrada._
+# SCAN FAKE
 
 ## Description
 
