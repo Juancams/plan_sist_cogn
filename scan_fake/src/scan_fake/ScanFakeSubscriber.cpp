@@ -21,45 +21,45 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 
-namespace scan_fake 
+namespace scan_fake
 {
 using std::placeholders::_1;
 
 ScanFakeSubscriber::ScanFakeSubscriber(const std::string & name)
-: Node (name)
+: Node(name)
 {
-    // Subscriber
-    sub = create_subscription<sensor_msgs::msg::LaserScan>(
-      "scan_fake", rclcpp::SensorDataQoS(),
-      std::bind(&ScanFakeSubscriber::scan_callback, this, _1));
+  // Subscriber
+  sub = create_subscription<sensor_msgs::msg::LaserScan>(
+    "scan_fake", rclcpp::SensorDataQoS(),
+    std::bind(&ScanFakeSubscriber::scan_callback, this, _1));
 }
 
 void ScanFakeSubscriber::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan)
 {
-    // Initialize min and max values
-    min_value = scan->range_max;
-    max_value = scan->range_min;
-    int n_readings = (scan->angle_max - scan->angle_min) / scan->angle_increment;
-    float value_sum = 0.0;
+  // Initialize min and max values
+  min_value = scan->range_max;
+  max_value = scan->range_min;
+  int n_readings = (scan->angle_max - scan->angle_min) / scan->angle_increment;
+  float value_sum = 0.0;
 
-    // Loop for checking every value in the scan ranges
-    for (int n = 0; n < n_readings; n++) {
-      if (scan->ranges[n] > max_value) {  // Compare if it is the maximum value
-        max_value = scan->ranges[n];
-      } else if (scan->ranges[n] < min_value) {  // Compare if it is the minimum value
-        min_value = scan->ranges[n];
-      }
-      // Sum of all values
-      value_sum += scan->ranges[n];
+  // Loop for checking every value in the scan ranges
+  for (int n = 0; n < n_readings; n++) {
+    if (scan->ranges[n] > max_value) {  // Compare if it is the maximum value
+      max_value = scan->ranges[n];
+    } else if (scan->ranges[n] < min_value) {  // Compare if it is the minimum value
+      min_value = scan->ranges[n];
     }
-    // Result of the mean
-    average = value_sum / n_readings;
+    // Sum of all values
+    value_sum += scan->ranges[n];
+  }
+  // Result of the mean
+  average = value_sum / n_readings;
 
-    // Show minimum, maximum and mean
-    RCLCPP_INFO(
-      get_logger(),
-      "The min value is: [%f] | The max value is: [%f] | The mean is: [%f] ",
-      min_value, max_value, average);
+  // Show minimum, maximum and mean
+  RCLCPP_INFO(
+    get_logger(),
+    "The min value is: [%f] | The max value is: [%f] | The mean is: [%f] ",
+    min_value, max_value, average);
 }
 
-} // namespace scan_fake
+}  // namespace scan_fake

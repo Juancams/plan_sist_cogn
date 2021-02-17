@@ -28,32 +28,32 @@ namespace scan_fake
 class ScanFakePublisher : public rclcpp::Node
 {
 public:
-    explicit ScanFakePublisher(const std::string & name);
+  explicit ScanFakePublisher(const std::string & name);
 
 private:
-    void generate_scan_fake();
-    void publish_scan_fake();
+  void generate_scan_fake();
+  void publish_scan_fake();
 
 private:
-    // Timer and publisher
-    rclcpp::TimerBase::SharedPtr timer;
-    rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr pub;
+  // Timer and publisher
+  rclcpp::TimerBase::SharedPtr timer;
+  rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr pub;
 
-    // Scan msg and parameters
-    sensor_msgs::msg::LaserScan scan;
-    const float angle_min = 0.0;
-    const float angle_max = 2.0 * M_PI;
-    const int n_readings = 100;
-    const float max_value = 8.0;
-    const float min_value = 0.0;
+  // Scan msg and parameters
+  sensor_msgs::msg::LaserScan scan;
+  const float angle_min = -M_PI;
+  const float angle_max = M_PI;
+  const int n_readings = 100;
+  const float max_value = 8.0;
+  const float min_value = 0.0;
 
-    // Random number generator
-    std::default_random_engine generator;
+  // Random number generator
+  std::default_random_engine generator;
 
-    // Normal distribution parameters
-    const float mean = 4.0;
-    const float standard_deviation = 1.0;
+  // Normal distribution parameters
+  const float mean = 4.0;
+  const float standard_deviation = 1.0;
 };
-} // namespace scan_fake
+}  // namespace scan_fake
 
-#endif // SCAN_FAKE__SCANFAKEPUBLISHER_HPP_
+#endif  // SCAN_FAKE__SCANFAKEPUBLISHER_HPP_
