@@ -1,5 +1,7 @@
 # THE REBOOTERS
 
+![main](https://github.com/Juancams/plan_sist_cogn/workflows/main/badge.svg)
+
 _Planificación y Sistemas Cognitivos._
 
 _Ingeniería de Robótica Software 2020/2021._
