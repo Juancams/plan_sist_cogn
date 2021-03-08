@@ -4,6 +4,9 @@
   robot island treasure
 )
 
+;; Example for FF-X planner with universal preconditions,
+;; negative preconditions and disjunctive preconditions
+
 (:predicates 
   (treasureInRobot ?t - treasure ?r - robot)
   (robotAt ?r - robot ?i - island)
