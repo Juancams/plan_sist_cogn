@@ -13,13 +13,13 @@
 ;; limitations under the License.
 
 (define (domain treasures)
-(:requirements :strips :typing :universal-preconditions :equality :negative-preconditions :disjunctive-preconditions)
+(:requirements :strips :typing :universal-preconditions :equality :negative-preconditions :disjunctive-preconditions :derived-predicates)
 (:types
   robot island treasure
 )
 
 ;; Example for FF-X planner with universal preconditions,
-;; negative preconditions and disjunctive preconditions
+;; negative preconditions, derived predicates and disjunctive preconditions
 
 (:predicates 
   (treasureInRobot ?t - treasure ?r - robot)
@@ -27,6 +27,8 @@
   (treasureAt ?t - treasure ?i - island)
   (is_route ?from - island ?to - island)
   (robotFinished ?r - robot)
+
+  (island-empty ?i - island ?t - treasure)
 )
 
 (:action sail
@@ -46,6 +48,11 @@
       (robotAt ?r ?to)
     )
 )
+
+  (:derived (island-empty ?i - island ?t - treasure)
+    (not (treasureAt ?t ?i))    
+  )
+    
 
 (:action take
     :parameters (?r - robot ?t - treasure ?i - island)
@@ -70,4 +77,3 @@
     )
 )
 )
-
