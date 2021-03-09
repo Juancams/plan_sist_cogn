@@ -1,7 +1,8 @@
 # MIPS-XXL
 ## Description
 
-This planner uses hill-climbing
+MIPS-XXL is a planning software which supports PDDL Level 3. The ‘XXL’ in the name is due to the fact that it supports exploration of state spaces that are much larger than the available RAM. It implements External Memory Planning Algorithms that utilize hard-disk in an efficient manner. 
+This planner uses hill-climbing search to solve problems.
 
 ## How to use?
 
