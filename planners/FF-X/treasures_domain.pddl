@@ -13,13 +13,13 @@
 ;; limitations under the License.
 
 (define (domain treasures)
-(:requirements :strips :typing :universal-preconditions :equality :negative-preconditions :disjunctive-preconditions ::derived-predicates)
+(:requirements :strips :typing :universal-preconditions :equality :negative-preconditions :disjunctive-preconditions :derived-predicates)
 (:types
   robot island treasure
 )
 
 ;; Example for FF-X planner with universal preconditions,
-;; negative preconditions and disjunctive preconditions
+;; negative preconditions, derived predicates and disjunctive preconditions
 
 (:predicates 
   (treasureInRobot ?t - treasure ?r - robot)
