@@ -61,6 +61,7 @@ OPTIONAL SETTINGS
 
 -timesteps               sets the plan quality metric as #time-steps
 ```
+
 ## Support
 
 - [x] :strips

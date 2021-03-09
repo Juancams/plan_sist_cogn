@@ -17,7 +17,6 @@ not.
 ```
 
 You can include more options:
-
 ```
 OPTIONS   DESCRIPTIONS
 
