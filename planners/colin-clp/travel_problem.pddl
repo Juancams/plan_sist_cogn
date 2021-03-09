@@ -40,5 +40,5 @@
     (car_at minicooper madrid)
 ))
 
-; (:metric minimize (distance_driven))
+(:metric minimize (distance_driven))
 )
