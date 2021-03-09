@@ -1,4 +1,4 @@
-# METRIC-FF
+# OPTIC-CLP
 ## Description
 
 OPTIC is a temporal planner for use in problems where plan cost is determined by preferences or time-dependent goal-collection costs. Such problems arise in a range of interesting situations, from scheduling the delivery of perishable goods, to coordinating order-fulfillment activities in warehouses.
