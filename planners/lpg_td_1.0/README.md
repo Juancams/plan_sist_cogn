@@ -1,21 +1,21 @@
 # LPG-TD-1.0
 ## Description
-```
+
 LPG is a fully automated system for solving planning problems specified
 using version 2.2 (2004) of the standard planning language PDDL. LPG-td 
 is a new version of LPG including several extensions and improvements. 
 LPG-td supports Timed Initial Literals and Derived Predicates, the two 
 main new features of PDDL2.2.
-```
 
 ## How to use?
 
 ```console
 ./lpg_td_1.0 -o domain.pddl -f problem.pddl -speed -noout
-
-LPG-td-1.0 SETTINGS:
 ```
-##NECESSARY SETTINGS
+
+LPG-td-1.0 settings:
+
+NECESSARY SETTINGS
 ```
 -o <string>              specifies the file of the operators 
 
@@ -25,7 +25,7 @@ LPG-td-1.0 SETTINGS:
                          alternative options are -speed and -quality
 
 ```
-##OPTIONAL SETTINGS
+OPTIONAL SETTINGS
 ```
 -p <string>              specifies the path for the operator/fact files
 
