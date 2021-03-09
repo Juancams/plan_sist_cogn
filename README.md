@@ -1,5 +1,7 @@
 # THE REBOOTERS
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![distro](https://img.shields.io/badge/ROS2-foxy-blue)
 ![main](https://github.com/Juancams/plan_sist_cogn/workflows/main/badge.svg)
 
 _Planificación y Sistemas Cognitivos._
