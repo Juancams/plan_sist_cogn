@@ -2,10 +2,15 @@
 ## Description
 Converts a planning instance into an E-MAJSAT instance, and then draws on techniques from Boolean satisfiability and dynamic programming to solve the E-MAJSAT instance. 
 Techniques as backward level reduction, accumulative learning of clauses, and search-space pruning based on multi-valued domain for-mulation are included.
+
+## Installation
+
+You can download Plan-A executable [here](https://github.com/tvaquero/itsimple/blob/master/myPlanners/Plan-A)
+
 ## How to use?
 
 ```console
-./plan-a -o domain.pddl -f problem.pddl
+./Plan-A -o domain.pddl -f problem.pddl
 ```
 
 You can include more options:

@@ -3,10 +3,16 @@
 
 OPTIC is a temporal planner for use in problems where plan cost is determined by preferences or time-dependent goal-collection costs. Such problems arise in a range of interesting situations, from scheduling the delivery of perishable goods, to coordinating order-fulfillment activities in warehouses.
 
+## Installation
+
+You can download optic-clp executable [here](https://github.com/tvaquero/itsimple/blob/master/myPlanners/optic-clp)
+
+Also, you can find how to install it in [OPTIC homepage](https://nms.kcl.ac.uk/planning/software/optic.html)
+
 ## How to use?
 
 ```console
-./optic_clp domain.pddl problem.pddl
+./optic-clp domain.pddl problem.pddl
 ```
 
 Options are: 

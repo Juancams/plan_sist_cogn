@@ -7,10 +7,14 @@ is a new version of LPG including several extensions and improvements.
 LPG-td supports Timed Initial Literals and Derived Predicates, the two 
 main new features of PDDL2.2.
 
+## Installation
+
+You can download lpg-td-1.0 executable [here](https://github.com/tvaquero/itsimple/blob/master/myPlanners/lpg-td-1.0)
+
 ## How to use?
 
 ```console
-./lpg_td_1.0 -o domain.pddl -f problem.pddl -speed -noout
+./lpg-td-1.0 -o domain.pddl -f problem.pddl -speed -noout
 ```
 
 LPG-td-1.0 settings:

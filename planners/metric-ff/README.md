@@ -1,19 +1,30 @@
-# MIPS-XXL
+# METRIC-FF
 ## Description
 
-MIPS-XXL is a planning software which supports PDDL Level 3. The ‘XXL’ in the name is due to the fact that it supports exploration of state spaces that are much larger than the available RAM. It implements External Memory Planning Algorithms that utilize hard-disk in an efficient manner. 
-This planner uses hill-climbing search to solve problems.
+Version of FF that can plan with numerical state variables and effects.
+MetricFF considers the numeric conditions of the actions in
+the heuristic estimation, but ignores the decreasing effects. 
+Regarding to, Metric-FF expands the same planning
+graph (the traditional one, in which a level of propositions
+is followed by a level with all applicable actions given these
+propositions) whether when a metric expression is defined or
+not.
+
+## Installation
+
+You can download metric-ff executable [here](https://github.com/tvaquero/itsimple/blob/master/myPlanners/metric-ff)
+
+Also, you can download and install visiting its [homepage](http://fai.cs.uni-saarland.de/hoffmann/metric-ff.html)
 
 ## How to use?
 
 ```console
-./mips_xxl -o domain.pddl -f problem.pddl
+./metric-ff -o domain.pddl -f problem.pddl
 ```
 
 You can include more options:
-
 ```
-OPTIONS     DESCRIPTIONS
+OPTIONS   DESCRIPTIONS
 
 -p <str>    path for operator and fact file
 -o <str>    operator file name
@@ -21,25 +32,17 @@ OPTIONS     DESCRIPTIONS
 
 -E          don't do enforced hill-climbing try before bestfirst
 
- - External - 
--X          do external enforced hill-climbing
--B          do external breadth-first search
--k <num>    beam size for pruning; valid for both Ex-EHC and Ex-BFS
--M          do external merge
----------------
 -g <num>    set weight w_g in w_g*g(s) + w_h*h(s) [preset: 0]
 -h <num>    set weight w_h in w_g*g(s) + w_h*h(s) [preset: 0]
 
 -O          switch on optimization expression (default is plan length)
--G          output normal task
--A          output ADL task instead of STRIPS
 ```
 
 ## Support
 
 - [x] :strips
 - [x] :typing
-- [x] :disjunctive-preconditions
+- [ ] :disjunctive-preconditions
 - [x] :equality 
 - [x] :existential-preconditions 
 - [x] :universal-preconditions 
@@ -55,15 +58,15 @@ OPTIONS     DESCRIPTIONS
 - [x] :fluents 
 - [ ] :open-world 
 - [ ] :true-negation 
-- [x] :adl 
+- [ ] :adl 
 - [ ] :ucpop 
-- [ ] :numeric-fluents 
-- [x] :durative-actions 
+- [x] :numeric-fluents 
+- [ ] :durative-actions 
 - [ ] :continuous-effects 
-- [x] :negative-preconditions
+- [ ] :negative-preconditions
 - [ ] :derived-predicates
-- [x] :timed-initial-literals
+- [ ] :timed-initial-literals
 - [ ] :constraints
-- [x] :preferences
+- [ ] :preferences
 - [ ] :action-costs
 - [ ] :goal-utilities

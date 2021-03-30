@@ -4,6 +4,10 @@
 Fast forward is a forward chaining heuristic state space planner. It ignores the delete list of all operators, extracting an explicit solution by using a GRAPHPLAN-style algorithm. 
 The number of actions in the relaxed solutions us used as a goal distance estimate, with a hill-climbing local search, which uses breadth first search to find a successor.
 
+## Installation
+
+You can download and install FF-X visiting its [homepage](http://fai.cs.uni-saarland.de/hoffmann/ff.html)
+
 ## How to use?
 
 ```console
