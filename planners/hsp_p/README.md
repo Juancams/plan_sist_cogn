@@ -3,6 +3,10 @@
 
 HSP is a planner based on the idea of Heuristic State Space search. In PDDL based planning, it may be the first of its kind, however, it should be noted that STRIPS which PDDL is based on has been around significantly longer. HSP’s heuristic is based on the delete free planning relaxation.
 
+## Installation
+
+You can download hsp_p executable [here](https://github.com/tvaquero/itsimple/blob/master/myPlanners/hsp_p)
+
 ## How to use?
 
 ```console

@@ -3,6 +3,10 @@
 
 Colin is a forward-chaining heuristic search planner. In addition to the full temporal semantics of PDDL, this planner is able to reasoning with COntinuous LINear numeric change.  Combines FF-style forward chaining search with the use of a linear program (which lets reduce the range of actions)
 
+## Installation
+
+You can download colin-clp executable [here](https://github.com/tvaquero/itsimple/blob/master/myPlanners/colin-clp)
+
 ## How to use?
 
 ```console
