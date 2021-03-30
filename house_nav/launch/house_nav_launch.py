@@ -49,8 +49,7 @@ def generate_launch_description():
             'launch',
             'plansys2_bringup_launch_monolithic.py')),
         launch_arguments={
-          #'model_file': package_dir + '/pddl/domain.pddl',
-          'model_file': '/home/noeljg/Desktop/cognitive-systems-projects/pddl/star_trips_world/star_trips2_domain.pddl',
+          'model_file': package_dir + '/pddl/domain.pddl',
           'namespace': namespace
           }.items())
 

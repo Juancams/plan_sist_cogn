@@ -12,15 +12,11 @@ set(dependencies
 
 include_directories(include)
 
-add_executable(house_nav src/house_nav.cpp)
-ament_target_dependencies(house_nav ${dependencies})
-
 install(DIRECTORY include/
   DESTINATION include/
 )
 
 install(TARGETS
-  house_nav
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
