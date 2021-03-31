@@ -1,5 +1,5 @@
 (define (domain house_nav)
-(:requirements :strips :universal-preconditions :adl :equality :typing :durative-actions :negative-preconditions)
+(:requirements :strips :universal-preconditions :adl :equality :typing :durative-actions :negative-preconditions :adl)
 
 (:types
   robot
@@ -30,7 +30,10 @@
     ))
     (over all(and
       (not (= ?from ?to))
-      (connected ?from ?to)
+      (or
+        (connected ?from ?to)
+        (connected ?to ?from)
+      )
       (forall (?zone - zone)
         (not(robot_at_zone ?r ?zone))         
       )
