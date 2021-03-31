@@ -12,7 +12,7 @@
 (:predicates
   (robot_at_room ?r - robot ?room - room)
   (robot_at_zone ?r - robot ?z - zone)
-  (locations_connected ?from ?to - room)
+  (connected ?from ?to - room)
   (zone_in_room ?z - zone ?room - room)
   (object_at_room ?o - object ?room - room)
   (object_at_zone ?o - object ?z - zone)
@@ -20,7 +20,7 @@
 )
 
 
-(:durative-action move_between_room
+(:durative-action move_between_rooms
   :parameters (?r - robot ?from ?to - room)
   :duration ( = ?duration 5)
   :condition (and
@@ -30,7 +30,7 @@
     ))
     (over all(and
       (not (= ?from ?to))
-      (locations_connected ?from ?to)
+      (connected ?from ?to)
       (forall (?zone - zone)
         (not(robot_at_zone ?r ?zone))         
       )
