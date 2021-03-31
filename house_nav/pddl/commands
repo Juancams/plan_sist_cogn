@@ -18,13 +18,13 @@ set instance corridor room
 
 set instance ball object
 
-set predicate (locations_connected salon corridor)
-set predicate (locations_connected salon kitchen)
-set predicate (locations_connected corridor storage)
-set predicate (locations_connected corridor small_bathroom)
-set predicate (locations_connected corridor big_bathroom)
-set predicate (locations_connected corridor bedroom1)
-set predicate (locations_connected corridor bedroom2)
+set predicate (connected salon corridor)
+set predicate (connected salon kitchen)
+set predicate (connected corridor storage)
+set predicate (connected corridor small_bathroom)
+set predicate (connected corridor big_bathroom)
+set predicate (connected corridor bedroom1)
+set predicate (connected corridor bedroom2)
 
 
 set predicate (robot_at_room r2d2 salon)
