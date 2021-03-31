@@ -1,5 +1,5 @@
 (define (domain house_nav)
-(:requirements :strips :universal-preconditions :adl :equality :typing :durative-actions :negative-preconditions :adl)
+(:requirements :strips :universal-preconditions :equality :typing :durative-actions :negative-preconditions :adl)
 
 (:types
   robot
