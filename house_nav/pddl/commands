@@ -1,0 +1,34 @@
+set instance r2d2 robot
+
+set instance zone1 zone
+set instance zone2 zone
+set instance zone3 zone
+set instance zone4 zone
+set instance zone5 zone
+
+set instance kitchen room
+set instance salon room
+set instance small_bathroom room
+set instance big_bathroom room
+set instance bedroom1 room
+set instance bedroom2 room
+set instance storage room
+
+set instance corridor room
+
+set instance ball object
+
+set predicate (connected salon corridor)
+set predicate (connected salon kitchen)
+set predicate (connected corridor storage)
+set predicate (connected corridor small_bathroom)
+set predicate (connected corridor big_bathroom)
+set predicate (connected corridor bedroom1)
+set predicate (connected corridor bedroom2)
+
+
+set predicate (robot_at_room r2d2 salon)
+
+set goal (and(robot_at_room r2d2 small_bathroom))
+run
+
