@@ -3,16 +3,16 @@
 
 (:types
   robot
-  room
-  zone
+  room corridor - door_location
+  room corridor zone - location
   object
 )
 
 
 (:predicates
-  (robot_at_room ?r - robot ?room - room)
+  (robot_at_location ?r - robot ?room - door_location)
   (robot_at_zone ?r - robot ?z - zone)
-  (connected ?from ?to - room)
+  (connected ?from ?to - door_location)
   (zone_in_room ?z - zone ?room - room)
   (object_at_room ?o - object ?room - room)
   (object_at_zone ?o - object ?z - zone)
@@ -21,11 +21,11 @@
 
 
 (:durative-action move_between_rooms
-  :parameters (?r - robot ?from ?to - room)
+  :parameters (?r - robot ?from ?to - door_location)
   :duration ( = ?duration 5)
   :condition (and
     (at start(and
-      (robot_at_room ?r ?from)
+      (robot_at_location ?r ?from)
       ; (robot_available ?r)
     ))
     (over all(and
@@ -40,12 +40,12 @@
     ))
   )
   :effect (and
-      (at start(and(
-        not(robot_at_room ?r ?from))
+      (at start(and
+        (not(robot_at_location ?r ?from))
         ; (not(robot_available ?r))
       ))
-      (at end(and(
-        robot_at_room ?r ?to)
+      (at end(and
+        (robot_at_location ?r ?to)
         ; (robot_available ?r)
       ))
   )
@@ -66,7 +66,7 @@
         (over all (and 
           (zone_in_room ?from ?room)
           (zone_in_room ?to ?room)
-          (robot_at_room ?r ?room)
+          (robot_at_location ?r ?room)
         ))
     )
     :effect (and 
@@ -93,7 +93,7 @@
         ))
         (over all (and 
           (zone_in_room ?from ?to)
-          (robot_at_room ?r ?to)
+          (robot_at_location ?r ?to)
         ))
     )
     :effect (and 
@@ -122,7 +122,7 @@
         ))
         (over all (and 
           (zone_in_room ?to ?from)
-          (robot_at_room ?r ?from)
+          (robot_at_location ?r ?from)
         ))
     )
     :effect (and 
@@ -137,7 +137,7 @@
 )
 
 
-;; Function that let the robot take an object if is at the same location
+;; Function that let the robot take an object if is in the room
 (:durative-action take_object_room
     :parameters (?r - robot ?o - object ?room - room)
     :duration (= ?duration 2)
@@ -146,7 +146,7 @@
           (object_at_room ?o ?room)
           ;(robot_available ?r)
         ))
-        (over all (robot_at_room ?r ?room)
+        (over all (robot_at_location ?r ?room)
         )
     )
     :effect (and 
@@ -162,7 +162,7 @@
 )
 
 
-;; Function that let the robot take an object if is at the same location
+;; Function that let the robot take an object if is in the zone
 (:durative-action take_object_zone
     :parameters (?r - robot ?o - object ?z - zone)
     :duration (= ?duration 2)
@@ -187,7 +187,7 @@
 )
 
 
-;; Function that let the robot leave an object if is at the same location
+;; Function that let the robot leave an object if is in the room
 (:durative-action leave_object_room
     :parameters (?r - robot ?o - object ?room - room)
     :duration (= ?duration 2)
@@ -196,7 +196,7 @@
           (object_in_robot ?o ?r)
          ; (robot_available ?r)
         ))
-        (over all (robot_at_room ?r ?room)
+        (over all (robot_at_location ?r ?room)
         )
     )
     :effect (and 
@@ -211,7 +211,7 @@
     )
 )
 
-;; Function that let the robot leave an object if is at the same location
+;; Function that let the robot leave an object if is in the zone
 (:durative-action leave_object_zone
     :parameters (?r - robot ?o - object ?z - zone)
     :duration (= ?duration 2)
