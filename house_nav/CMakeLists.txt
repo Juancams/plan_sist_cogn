@@ -12,9 +12,9 @@ set(dependencies
 
 include_directories(include)
 
-install(DIRECTORY include/
-  DESTINATION include/
-)
+# install(DIRECTORY include/
+#   DESTINATION include/
+# )
 
 install(TARGETS
   ARCHIVE DESTINATION lib

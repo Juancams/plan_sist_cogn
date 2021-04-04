@@ -3,29 +3,27 @@
 
 (:types
   robot
-  room
-  zone
+  room corridor zone - location
   object
 )
 
 
 (:predicates
-  (robot_at_room ?r - robot ?room - room)
-  (robot_at_zone ?r - robot ?z - zone)
-  (connected ?from ?to - room)
+  (robot_at ?r - robot ?l - location)
+  (connected ?from ?to - location)
   (zone_in_room ?z - zone ?room - room)
-  (object_at_room ?o - object ?room - room)
-  (object_at_zone ?o - object ?z - zone)
+  (object_at ?o - object ?l - location)
   (object_in_robot ?o - object ?r - robot)
 )
 
 
+;; Function to move between locations
 (:durative-action move_between_rooms
-  :parameters (?r - robot ?from ?to - room)
+  :parameters (?r - robot ?from ?to - location)
   :duration ( = ?duration 5)
   :condition (and
     (at start(and
-      (robot_at_room ?r ?from)
+      (robot_at ?r ?from)
       ; (robot_available ?r)
     ))
     (over all(and
@@ -35,17 +33,17 @@
         (connected ?to ?from)
       )
       (forall (?zone - zone)
-        (not(robot_at_zone ?r ?zone))         
+        (not(robot_at ?r ?zone))         
       )
     ))
   )
   :effect (and
-      (at start(and(
-        not(robot_at_room ?r ?from))
+      (at start(and
+        (not(robot_at ?r ?from))
         ; (not(robot_available ?r))
       ))
-      (at end(and(
-        robot_at_room ?r ?to)
+      (at end(and
+        (robot_at ?r ?to)
         ; (robot_available ?r)
       ))
   )
@@ -59,23 +57,23 @@
     :duration (= ?duration 2)
     :condition (and 
         (at start (and 
-          (robot_at_zone ?r ?from)
+          (robot_at ?r ?from)
           (not (= ?from ?to))
          ; (robot_available ?r) 
         ))
         (over all (and 
           (zone_in_room ?from ?room)
           (zone_in_room ?to ?room)
-          (robot_at_room ?r ?room)
+          (robot_at ?r ?room)
         ))
     )
     :effect (and 
         (at start (and 
-          (not(robot_at_zone ?r ?from))
+          (not(robot_at ?r ?from))
           ;(not(robot_available ?r))
         ))
         (at end (and 
-          (robot_at_zone ?r ?to)
+          (robot_at ?r ?to)
          ; (robot_available ?r)
         ))
     )
@@ -89,17 +87,17 @@
     :condition (and 
         (at start (and 
           ;(robot_available ?r)
-          (robot_at_zone ?r ?from)
+          (robot_at ?r ?from)
         ))
         (over all (and 
           (zone_in_room ?from ?to)
-          (robot_at_room ?r ?to)
+          (robot_at ?r ?to)
         ))
     )
     :effect (and 
         (at start (and 
          ; (not(robot_available ?r))
-          (not(robot_at_zone ?r ?from))
+          (not(robot_at ?r ?from))
         ))
         ; (at end (robot_available ?r)
         ; )
@@ -116,13 +114,13 @@
           ;(robot_available ?r)
           (forall (?zone - zone)
             (forall (?zone - zone)
-            (not(robot_at_zone ?r ?zone))
+            (not(robot_at ?r ?zone))
             )
           )
         ))
         (over all (and 
           (zone_in_room ?to ?from)
-          (robot_at_room ?r ?from)
+          (robot_at ?r ?from)
         ))
     )
     :effect (and 
@@ -131,27 +129,27 @@
         ))
         (at end (and 
         ;  (robot_available ?r)
-          (robot_at_zone ?r ?to)
+          (robot_at ?r ?to)
         ))
     )
 )
 
 
-;; Function that let the robot take an object if is at the same location
-(:durative-action take_object_room
-    :parameters (?r - robot ?o - object ?room - room)
+;; Function that let the robot pick an object if is in the same location
+(:durative-action pick_object
+    :parameters (?r - robot ?o - object ?l - location)
     :duration (= ?duration 2)
     :condition (and 
         (at start (and 
-          (object_at_room ?o ?room)
+          (object_at ?o ?l)
           ;(robot_available ?r)
         ))
-        (over all (robot_at_room ?r ?room)
+        (over all (robot_at ?r ?l)
         )
     )
     :effect (and 
         (at start (and 
-          (not(object_at_room ?o ?room))
+          (not(object_at ?o ?l))
           ;(not (robot_available ?r))
         ))
         (at end (and 
@@ -162,41 +160,17 @@
 )
 
 
-;; Function that let the robot take an object if is at the same location
-(:durative-action take_object_zone
-    :parameters (?r - robot ?o - object ?z - zone)
-    :duration (= ?duration 2)
-    :condition (and 
-        (at start (and 
-          (object_at_zone ?o ?z)
-          ;(robot_available ?r)
-        ))
-        (over all (robot_at_zone ?r ?z)
-        )
-    )
-    :effect (and 
-        (at start (and 
-          (not(object_at_zone ?o ?z))
-          ;(not (robot_available ?r))
-        ))
-        (at end (and 
-          (object_in_robot ?o ?r)
-         ; (robot_available ?r)
-        ))
-    )
-)
 
-
-;; Function that let the robot leave an object if is at the same location
-(:durative-action leave_object_room
-    :parameters (?r - robot ?o - object ?room - room)
+;; Function that let the robot place an object if is in the same location
+(:durative-action place_object
+    :parameters (?r - robot ?o - object ?l - location)
     :duration (= ?duration 2)
     :condition (and 
         (at start (and 
           (object_in_robot ?o ?r)
          ; (robot_available ?r)
         ))
-        (over all (robot_at_room ?r ?room)
+        (over all (robot_at ?r ?l)
         )
     )
     :effect (and 
@@ -205,33 +179,10 @@
           (not(object_in_robot ?o ?r))
         ))
         (at end (and
-          (object_at_room ?o ?room) 
+          (object_at ?o ?l) 
          ; (robot_available ?r)
         ))
     )
 )
 
-;; Function that let the robot leave an object if is at the same location
-(:durative-action leave_object_zone
-    :parameters (?r - robot ?o - object ?z - zone)
-    :duration (= ?duration 2)
-    :condition (and 
-        (at start (and 
-          (object_in_robot ?o ?r)
-         ; (robot_available ?r)
-        ))
-        (over all (robot_at_zone ?r ?z)
-        )
-    )
-    :effect (and 
-        (at start (and 
-         ; (not(robot_available ?r))
-          (not(object_in_robot ?o ?r))
-        ))
-        (at end (and
-          (object_at_zone ?o ?z) 
-         ; (robot_available ?r)
-        ))
-    )
-)
 )
