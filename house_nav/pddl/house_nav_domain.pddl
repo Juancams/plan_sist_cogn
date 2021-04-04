@@ -9,10 +9,10 @@
 
 
 (:predicates
-  (robot_at ?r - robot ?z - location)
+  (robot_at ?r - robot ?l - location)
   (connected ?from ?to - location)
   (zone_in_room ?z - zone ?room - room)
-  (object_at ?o - object ?z - location)
+  (object_at ?o - object ?l - location)
   (object_in_robot ?o - object ?r - robot)
 )
 
@@ -135,21 +135,21 @@
 )
 
 
-;; Function that let the robot take an object if is in the same location
-(:durative-action take_object
-    :parameters (?r - robot ?o - object ?room - location)
+;; Function that let the robot pick an object if is in the same location
+(:durative-action pick_object
+    :parameters (?r - robot ?o - object ?l - location)
     :duration (= ?duration 2)
     :condition (and 
         (at start (and 
-          (object_at ?o ?room)
+          (object_at ?o ?l)
           ;(robot_available ?r)
         ))
-        (over all (robot_at ?r ?room)
+        (over all (robot_at ?r ?l)
         )
     )
     :effect (and 
         (at start (and 
-          (not(object_at ?o ?room))
+          (not(object_at ?o ?l))
           ;(not (robot_available ?r))
         ))
         (at end (and 
@@ -161,16 +161,16 @@
 
 
 
-;; Function that let the robot leave an object if is in the same location
-(:durative-action leave_object
-    :parameters (?r - robot ?o - object ?room - location)
+;; Function that let the robot place an object if is in the same location
+(:durative-action place_object
+    :parameters (?r - robot ?o - object ?l - location)
     :duration (= ?duration 2)
     :condition (and 
         (at start (and 
           (object_in_robot ?o ?r)
          ; (robot_available ?r)
         ))
-        (over all (robot_at ?r ?room)
+        (over all (robot_at ?r ?l)
         )
     )
     :effect (and 
@@ -179,7 +179,7 @@
           (not(object_in_robot ?o ?r))
         ))
         (at end (and
-          (object_at ?o ?room) 
+          (object_at ?o ?l) 
          ; (robot_available ?r)
         ))
     )
