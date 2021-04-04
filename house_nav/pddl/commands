@@ -29,10 +29,10 @@ set predicate (connected corridor bedroom2)
 set predicate (zone_in_room tv salon)
 set predicate (zone_in_room sofa salon)
 
-set predicate (robot_at_location r2d2 salon)
+set predicate (robot_at r2d2 salon)
 
-set predicate (object_at_zone ball tv)
+set predicate (object_at ball tv)
 
-set goal (and(robot_at_room r2d2 small_bathroom))
+set goal (and(robot_at r2d2 small_bathroom))
 run
 
