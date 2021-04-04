@@ -12,12 +12,12 @@
   (robot_at ?r - robot ?z - location)
   (connected ?from ?to - location)
   (zone_in_room ?z - zone ?room - room)
- ; (object_at_room ?o - object ?room - room)
   (object_at ?o - object ?z - location)
   (object_in_robot ?o - object ?r - robot)
 )
 
 
+;; Function to move between locations
 (:durative-action move_between_rooms
   :parameters (?r - robot ?from ?to - location)
   :duration ( = ?duration 5)
@@ -135,7 +135,7 @@
 )
 
 
-;; Function that let the robot take an object if is in the room
+;; Function that let the robot take an object if is in the same location
 (:durative-action take_object
     :parameters (?r - robot ?o - object ?room - location)
     :duration (= ?duration 2)
@@ -161,7 +161,7 @@
 
 
 
-;; Function that let the robot leave an object if is in the room
+;; Function that let the robot leave an object if is in the same location
 (:durative-action leave_object
     :parameters (?r - robot ?o - object ?room - location)
     :duration (= ?duration 2)
