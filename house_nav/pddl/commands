@@ -1,7 +1,7 @@
 set instance r2d2 robot
 
-set instance zone1 zone
-set instance zone2 zone
+set instance tv zone
+set instance sofa zone
 set instance zone3 zone
 set instance zone4 zone
 set instance zone5 zone
@@ -26,8 +26,12 @@ set predicate (connected corridor big_bathroom)
 set predicate (connected corridor bedroom1)
 set predicate (connected corridor bedroom2)
 
+set predicate (zone_in_room tv salon)
+set predicate (zone_in_room sofa salon)
 
-set predicate (robot_at_room r2d2 salon)
+set predicate (robot_at_location r2d2 salon)
+
+set predicate (object_at_zone ball tv)
 
 set goal (and(robot_at_room r2d2 small_bathroom))
 run
