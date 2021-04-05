@@ -10,8 +10,8 @@ set instance kitchen room
 set instance salon room
 set instance small_bathroom room
 set instance big_bathroom room
-set instance bedroom1 room
-set instance bedroom2 room
+set instance big_bedroom room
+set instance small_bedroom room
 set instance storage room
 
 set instance corridor room
@@ -33,11 +33,11 @@ set predicate (connected small_bathroom corridor)
 set predicate (connected corridor big_bathroom)
 set predicate (connected big_bathroom corridor)
 
-set predicate (connected corridor bedroom1)
-set predicate (connected bedroom1 corridor)
+set predicate (connected corridor big_bedroom)
+set predicate (connected big_bedroom corridor)
 
-set predicate (connected corridor bedroom2)
-set predicate (connected bedroom2 corridor)
+set predicate (connected corridor small_bedroom)
+set predicate (connected small_bedroom corridor)
 
 set predicate (zone_in_room tv salon)
 set predicate (zone_in_room sofa salon)
