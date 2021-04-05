@@ -109,7 +109,7 @@ def generate_launch_description():
             'launch',
             'plansys2_bringup_launch_monolithic.py')),
         launch_arguments={
-          'model_file': package_dir + '/pddl/domain.pddl',
+          'model_file': package_dir + '/pddl/house_nav_domain.pddl',
           'namespace': namespace
           }.items())
 
@@ -142,6 +142,22 @@ def generate_launch_description():
                           'params_file': params_file,
                           'default_bt_xml_filename': default_bt_xml_filename,
                           'autostart': autostart}.items())
+    
+    pick_cmd = Node(
+        package='house_nav',
+        executable='pick_action_node',
+        name='pick_action_node',
+        namespace=namespace,
+        output='screen',
+        parameters=[])
+
+    place_cmd = Node(
+        package='house_nav',
+        executable='place_action_node',
+        name='place_action_node',
+        namespace=namespace,
+        output='screen',
+        parameters=[])
 
     # Create the launch description
     ld = LaunchDescription()
@@ -166,5 +182,8 @@ def generate_launch_description():
     ld.add_action(webots)
     ld.add_action(rviz_cmd)
     ld.add_action(bringup_cmd)
+
+    ld.add_action(pick_cmd)
+    ld.add_action(place_cmd)
 
     return ld
