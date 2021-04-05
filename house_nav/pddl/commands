@@ -19,12 +19,25 @@ set instance corridor room
 set instance ball object
 
 set predicate (connected salon corridor)
+set predicate (connected corridor salon)
+
 set predicate (connected salon kitchen)
+set predicate (connected kitchen salon)
+
 set predicate (connected corridor storage)
+set predicate (connected storage corridor) 
+
 set predicate (connected corridor small_bathroom)
+set predicate (connected small_bathroom corridor)
+
 set predicate (connected corridor big_bathroom)
+set predicate (connected big_bathroom corridor)
+
 set predicate (connected corridor bedroom1)
+set predicate (connected bedroom1 corridor)
+
 set predicate (connected corridor bedroom2)
+set predicate (connected bedroom2 corridor)
 
 set predicate (zone_in_room tv salon)
 set predicate (zone_in_room sofa salon)
@@ -32,6 +45,8 @@ set predicate (zone_in_room sofa salon)
 set predicate (robot_at r2d2 salon)
 
 set predicate (object_at ball tv)
+
+set predicate (robot_out_zone r2d2)
 
 set goal (and(robot_at r2d2 small_bathroom))
 run
