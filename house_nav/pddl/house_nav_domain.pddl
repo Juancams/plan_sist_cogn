@@ -1,5 +1,5 @@
 (define (domain house_nav)
-(:requirements :strips :universal-preconditions :equality :typing :durative-actions :negative-preconditions :adl)
+(:requirements :strips :universal-preconditions :negative-preconditions :equality :typing :durative-actions)
 
 (:types
   robot
@@ -14,6 +14,7 @@
   (zone_in_room ?z - zone ?room - room)
   (object_at ?o - object ?l - location)
   (object_in_robot ?o - object ?r - robot)
+  (robot_out_zone ?r - robot)
 )
 
 
@@ -24,17 +25,12 @@
   :condition (and
     (at start(and
       (robot_at ?r ?from)
+      (not (= ?from ?to))
       ; (robot_available ?r)
     ))
     (over all(and
-      (not (= ?from ?to))
-      (or
-        (connected ?from ?to)
-        (connected ?to ?from)
-      )
-      (forall (?zone - zone)
-        (not(robot_at ?r ?zone))         
-      )
+      (connected ?from ?to)
+      (robot_out_zone ?r)
     ))
   )
   :effect (and
@@ -99,8 +95,10 @@
          ; (not(robot_available ?r))
           (not(robot_at ?r ?from))
         ))
-        ; (at end (robot_available ?r)
-        ; )
+        (at end (and
+        ;(robot_available ?r)
+          (robot_out_zone ?r)
+        ))
     )
 )
 
@@ -112,11 +110,7 @@
     :condition (and 
         (at start (and 
           ;(robot_available ?r)
-          (forall (?zone - zone)
-            (forall (?zone - zone)
-            (not(robot_at ?r ?zone))
-            )
-          )
+          (robot_out_zone ?r)
         ))
         (over all (and 
           (zone_in_room ?to ?from)
@@ -126,6 +120,7 @@
     :effect (and 
         (at start (and 
          ; (not(robot_available ?r))
+          (not (robot_out_zone ?r))
         ))
         (at end (and 
         ;  (robot_available ?r)
