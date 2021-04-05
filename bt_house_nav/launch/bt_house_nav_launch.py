@@ -79,22 +79,6 @@ def generate_launch_description():
                           'use_namespace': 'False',
                           'rviz_config': rviz_config_file}.items())
     
-    pick_cmd = Node(
-        package='house_nav',
-        executable='pick_action_node',
-        name='pick_action_node',
-        namespace=namespace,
-        output='screen',
-        parameters=[])
-
-    place_cmd = Node(
-        package='house_nav',
-        executable='place_action_node',
-        name='place_action_node',
-        namespace=namespace,
-        output='screen',
-        parameters=[])
-
     # Create the launch description
     ld = LaunchDescription()
     
@@ -108,8 +92,5 @@ def generate_launch_description():
     ld.add_action(plansys2_cmd)
     ld.add_action(webots)
     ld.add_action(rviz_cmd)
-
-    ld.add_action(pick_cmd)
-    ld.add_action(place_cmd)
 
     return ld
