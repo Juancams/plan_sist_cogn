@@ -131,14 +131,13 @@
 ;; Function that let the robot pick an object if is in the same location
 (:durative-action pick_object
     :parameters (?r - robot ?o - object ?l - location)
-    :duration (= ?duration 2)
+    :duration (= ?duration 5)
     :condition (and 
         (at start (and 
           (object_at ?o ?l)
+          (robot_at ?r ?l)
           ;(robot_available ?r)
         ))
-        (over all (robot_at ?r ?l)
-        )
     )
     :effect (and 
         (at start (and 
@@ -157,14 +156,13 @@
 ;; Function that let the robot place an object if is in the same location
 (:durative-action place_object
     :parameters (?r - robot ?o - object ?l - location)
-    :duration (= ?duration 2)
+    :duration (= ?duration 5)
     :condition (and 
         (at start (and 
           (object_in_robot ?o ?r)
+          (robot_at ?r ?l)
          ; (robot_available ?r)
         ))
-        (over all (robot_at ?r ?l)
-        )
     )
     :effect (and 
         (at start (and 
