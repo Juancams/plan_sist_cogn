@@ -26,20 +26,29 @@ set(dependencies
 
 include_directories(include)
 
+install(DIRECTORY include/
+  DESTINATION include/
+)
+
 add_library(${PROJECT_NAME} SHARED 
+  src/house_nav/Pick.cpp
+  src/house_nav/Place.cpp
   src/house_nav/Move.cpp
   src/house_nav/Controller.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
+add_executable(pick_action_node src/pick_action_node.cpp)
+add_executable(place_action_node src/place_action_node.cpp)
 add_executable(house_nav_controller_node src/house_nav_controller_node.cpp)
-
 add_executable(move_between_rooms_action_node src/move_between_rooms_action_node.cpp)
 add_executable(enter_zone_action_node src/enter_zone_action_node.cpp)
 add_executable(leave_zone_action_node src/leave_zone_action_node.cpp)
 add_executable(move_between_zones_action_node src/move_between_zones_action_node.cpp)
 
+target_link_libraries(pick_action_node ${PROJECT_NAME})
+target_link_libraries(place_action_node ${PROJECT_NAME})
 target_link_libraries(move_between_rooms_action_node ${PROJECT_NAME})
 target_link_libraries(enter_zone_action_node ${PROJECT_NAME})
 target_link_libraries(leave_zone_action_node ${PROJECT_NAME})
@@ -54,6 +63,8 @@ install(DIRECTORY include/
 
 install(TARGETS
   ${PROJECT_NAME}
+  pick_action_node
+  place_action_node
   house_nav_controller_node
   move_between_rooms_action_node
   enter_zone_action_node

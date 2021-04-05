@@ -26,9 +26,25 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     package_dir = get_package_share_directory('house_nav')
-
+      
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1')
+
+    pick_cmd = Node(
+        package='house_nav',
+        executable='pick_action_node',
+        name='pick_action_node',
+        
+        output='screen',
+        parameters=[])
+
+    place_cmd = Node(
+        package='house_nav',
+        executable='place_action_node',
+        name='place_action_node',
+        
+        output='screen',
+        parameters=[])
 
     move_between_rooms_cmd = Node(
     package='house_nav',
@@ -58,6 +74,8 @@ def generate_launch_description():
 
     ld.add_action(stdout_linebuf_envvar)
 
+    ld.add_action(pick_cmd)
+    ld.add_action(place_cmd)
     ld.add_action(move_between_rooms_cmd)
     ld.add_action(enter_zone_cmd)
     ld.add_action(leave_zone_cmd)
