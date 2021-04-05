@@ -95,6 +95,29 @@ def generate_launch_description():
         output='screen',
         parameters=[])
 
+    move_between_rooms_cmd = Node(
+    package='house_nav',
+    executable='move_between_rooms_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])
+
+    enter_zone_cmd = Node(
+    package='house_nav',
+    executable='enter_zone_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])
+
+    leave_zone_cmd = Node(
+    package='house_nav',
+    executable='leave_zone_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])
+
+    move_between_zones_cmd = Node(
+    package='house_nav',
+    executable='move_between_zones_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])   
     # Create the launch description
     ld = LaunchDescription()
     
@@ -111,5 +134,9 @@ def generate_launch_description():
 
     ld.add_action(pick_cmd)
     ld.add_action(place_cmd)
+    ld.add_action(move_between_rooms_cmd)
+    ld.add_action(enter_zone_cmd)
+    ld.add_action(leave_zone_cmd)
+    ld.add_action(move_between_zones_cmd)
 
     return ld
