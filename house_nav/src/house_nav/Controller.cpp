@@ -61,8 +61,8 @@ namespace house_nav
     problem_expert_->addInstance(plansys2::Instance{"bath", "zone"});
 
     problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
+    problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 dinning_room)"));
     problem_expert_->addPredicate(plansys2::Predicate("(object_at ball dinning_room)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(robot_out_zone r2d2)"));
    
     problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bathroom1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected bathroom1 corridor1)"));
