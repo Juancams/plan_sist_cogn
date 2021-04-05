@@ -34,9 +34,7 @@ namespace house_nav
       progress_ = 0.0;
       std::cout << std::endl;
     }
-
-    std::cout << "\r\e[K" << std::flush;
-    std::cout << "Placing object ... [" << std::min(100.0, progress_ * 100.0) << "%]  " <<
-      std::flush;
+    RCLCPP_INFO(get_logger(),"Placing object");
   }
+
 };
