@@ -2,8 +2,8 @@
 (:requirements :strips :universal-preconditions :typing :durative-actions)
 
 (:types
-  robot
   room corridor zone - location
+  robot
   object
 )
 
