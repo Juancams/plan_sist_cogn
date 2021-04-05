@@ -1,0 +1,21 @@
+move_param_node:
+  ros__parameters:
+    waypoints: ["init", "tv", "bathroom1", "bathroom2", "bedroom1", "bedroom2", "corridor1", "kitchen",
+    "dinning_room", "next_to_bed", "desktop", "fridge", "sink", "table", "window", "bath"]
+    waypoint_coords:
+      init: [0.0, 0.0, 0.0]
+      bathroom1: [-1.85, 3.0, 0.0]
+      bathroom2: [-4.5, -0.6, 0.0]
+      bedroom1: [-4.6, 1.75, 0.0]
+      bedroom2: [-4.0, -4.0, 0.0]
+      corridor1: [-2.0, 2.0, 0.0]
+      kitchen: [1.68, -2.6, 0.0]
+      dinning_room: [1.0, 3.0, 0.0]
+      next_to_bed: [-3.6, 3.0, 0.0]
+      desktop: [-6.0, 1.5, 0.0]
+      fridge: [3.8, -4.3, 0.0]
+      sink: [3.8, -3.2, 0.0]
+      tv: [3.5, -0.5, 0.0]
+      table: [4.5, 3.0, 0.0]
+      window: [1.0, 3.5, 0.0]
+      bath: [-6.0, -1.0, 0.0]

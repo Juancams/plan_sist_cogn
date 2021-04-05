@@ -79,6 +79,29 @@ def generate_launch_description():
                           'use_namespace': 'False',
                           'rviz_config': rviz_config_file}.items())
     
+    move_between_rooms_cmd = Node(
+    package='house_nav',
+    executable='move_between_rooms_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])
+
+    enter_zone_cmd = Node(
+    package='house_nav',
+    executable='enter_zone_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])
+
+    leave_zone_cmd = Node(
+    package='house_nav',
+    executable='leave_zone_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])
+
+    move_between_zones_cmd = Node(
+    package='house_nav',
+    executable='move_between_zones_action_node',
+    output='screen',
+    parameters=[os.path.join(package_dir, 'config','params.yaml')])   
     # Create the launch description
     ld = LaunchDescription()
     
@@ -92,5 +115,10 @@ def generate_launch_description():
     ld.add_action(plansys2_cmd)
     ld.add_action(webots)
     ld.add_action(rviz_cmd)
+
+    ld.add_action(move_between_rooms_cmd)
+    ld.add_action(enter_zone_cmd)
+    ld.add_action(leave_zone_cmd)
+    ld.add_action(move_between_zones_cmd)
 
     return ld

@@ -1,5 +1,5 @@
 (define (domain house_nav)
-(:requirements :strips :universal-preconditions :negative-preconditions :equality :typing :durative-actions)
+(:requirements :strips :universal-preconditions :typing :durative-actions)
 
 (:types
   robot
@@ -25,7 +25,6 @@
   :condition (and
     (at start(and
       (robot_at ?r ?from)
-      (not (= ?from ?to))
       ; (robot_available ?r)
     ))
     (over all(and
@@ -54,7 +53,6 @@
     :condition (and 
         (at start (and 
           (robot_at ?r ?from)
-          (not (= ?from ?to))
          ; (robot_available ?r) 
         ))
         (over all (and 
