@@ -58,13 +58,13 @@ def generate_launch_description():
             'launch',
             'plansys2_bringup_launch_monolithic.py')),
         launch_arguments={
-          'model_file': package_dir + '/pddl/domain.pddl',
+          'model_file': package_dir + '/pddl/house_nav_domain.pddl',
           'namespace': namespace
           }.items())
 
     webots = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(os.path.join(robots_dir, 'launch', 'tiago.launch.py'))
+            os.path.join(os.path.join(robots_dir, 'launch', 'tiago_nodoors.launch.py'))
         ),
         launch_arguments={'namespace': namespace
             }.items()
