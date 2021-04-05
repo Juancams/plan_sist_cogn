@@ -37,6 +37,7 @@ namespace house_nav
   void Controller::init_knowledge()
   {
     problem_expert_->addInstance(plansys2::Instance{"r2d2", "robot"});
+  problem_expert_->addInstance(plansys2::Instance{"ball", "object"});
 
     problem_expert_->addInstance(plansys2::Instance{"init", "room"});
     problem_expert_->addInstance(plansys2::Instance{"bedroom2", "room"});
@@ -59,6 +60,7 @@ namespace house_nav
     problem_expert_->addInstance(plansys2::Instance{"bath", "zone"});
 
     problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
+    problem_expert_->addPredicate(plansys2::Predicate("(object_at ball dinning_room)"));
     problem_expert_->addPredicate(plansys2::Predicate("(robot_out_zone r2d2)"));
    
     problem_expert_->addPredicate(plansys2::Predicate("(connected init dinning_room)"));
@@ -87,14 +89,19 @@ namespace house_nav
 
     problem_expert_->setGoal(
       plansys2::Goal(
-        "(and(robot_at r2d2 fridge))"));
+        "(and(object_at ball kitchen))"));
   }
 
   void Controller::step()
   {
     if (!executor_client_->execute_and_check_plan()) {  // Plan finished
       auto result = executor_client_->getResult();
-
+      auto feedback = executor_client_->getFeedBack();
+      for (const auto & action_feedback : feedback.action_execution_status) {
+        std::cout << "[" << action_feedback.action << " " <<
+        action_feedback.completion * 100.0 << "%]";
+      }
+      std::cout << std::endl;
       if (result.value().success) {
         RCLCPP_INFO(get_logger(), "Plan succesfully finished");
       } else {
