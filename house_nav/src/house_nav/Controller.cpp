@@ -39,7 +39,7 @@ namespace house_nav
     problem_expert_->addInstance(plansys2::Instance{"r2d2", "robot"});
   problem_expert_->addInstance(plansys2::Instance{"ball", "object"});
 
-    problem_expert_->addInstance(plansys2::Instance{"init", "room"});
+   
     problem_expert_->addInstance(plansys2::Instance{"bedroom2", "room"});
     problem_expert_->addInstance(plansys2::Instance{"bedroom1", "room"});
     problem_expert_->addInstance(plansys2::Instance{"bathroom1", "room"});
@@ -48,7 +48,8 @@ namespace house_nav
     problem_expert_->addInstance(plansys2::Instance{"dinning_room", "room"});
 
     problem_expert_->addInstance(plansys2::Instance{"corridor1", "corridor"});
-
+    
+    problem_expert_->addInstance(plansys2::Instance{"init", "zone"});
     problem_expert_->addInstance(plansys2::Instance{"entrance", "zone"});
     problem_expert_->addInstance(plansys2::Instance{"next_to_bed", "zone"});
     problem_expert_->addInstance(plansys2::Instance{"desktop", "zone"});
@@ -63,8 +64,6 @@ namespace house_nav
     problem_expert_->addPredicate(plansys2::Predicate("(object_at ball dinning_room)"));
     problem_expert_->addPredicate(plansys2::Predicate("(robot_out_zone r2d2)"));
    
-    problem_expert_->addPredicate(plansys2::Predicate("(connected init dinning_room)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected dinning_room init)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bathroom1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected bathroom1 corridor1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bathroom2)"));
@@ -78,6 +77,7 @@ namespace house_nav
     problem_expert_->addPredicate(plansys2::Predicate("(connected dinning_room kitchen)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected kitchen dinning_room)"));
 
+    problem_expert_->addPredicate(plansys2::Predicate("(zone_in_room init dinning_room)"));
     problem_expert_->addPredicate(plansys2::Predicate("(zone_in_room next_to_bed bedroom1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(zone_in_room desktop bedroom1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(zone_in_room fridge kitchen)"));
