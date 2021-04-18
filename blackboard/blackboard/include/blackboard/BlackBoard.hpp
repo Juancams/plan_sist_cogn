@@ -36,6 +36,8 @@ public:
 
   void add_entry(const std::string & parent_key, const std::string & key, EntryBase::Ptr entry);
   EntryBase::Ptr get_entry(const std::string & parent_key, const std::string & key);
+  bool exist_parent(const std::string & parent_key);
+  bool exist_entry(const std::string & parent_key, const std::string & key);
 
 protected:
   std::map<std::string, std::map<std::string, EntryBase::Ptr>> entries_;

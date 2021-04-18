@@ -17,6 +17,8 @@
 
 #include "blackboard_msgs/srv/add_entry.hpp"
 #include "blackboard_msgs/srv/get_entry.hpp"
+#include "blackboard_msgs/srv/exist_parent.hpp"
+#include "blackboard_msgs/srv/exist_entry.hpp"
 
 #include "blackboard/BlackBoardClient.hpp"
 
@@ -33,10 +35,15 @@ BlackBoardClient::BlackBoardClient()
     "blackboard/add_entry");
   get_entry_client_ = client_node_->create_client<blackboard_msgs::srv::GetEntry>(
     "blackboard/get_entry");
+  exist_parent_client_ = client_node_->create_client<blackboard_msgs::srv::ExistParent>(
+    "blackboard/exist_parent");
+  exist_entry_client_ = client_node_->create_client<blackboard_msgs::srv::ExistEntry>(
+    "blackboard/exist_entry");
 }
 
 void
-BlackBoardClient::add_entry(const std::string & parent_key, const std::string & key, EntryBase::Ptr entry)
+BlackBoardClient::add_entry(
+  const std::string & parent_key, const std::string & key, EntryBase::Ptr entry)
 {
   while (!add_entry_client_->wait_for_service(std::chrono::seconds(5))) {
     if (!rclcpp::ok()) {
@@ -45,19 +52,21 @@ BlackBoardClient::add_entry(const std::string & parent_key, const std::string & 
     RCLCPP_ERROR_STREAM(
       client_node_->get_logger(),
       add_entry_client_->get_service_name() <<
-        " service  client: waiting for service to appear...");
+        " service client: waiting for service to appear...");
   }
 
   auto request = std::make_shared<blackboard_msgs::srv::AddEntry::Request>();
 
   if (entry->get_type() == EntryBase::BOOL) {
     request->entry.type = blackboard_msgs::msg::Entry::BOOL_TYPE;
+    request->entry.parent_key = parent_key;
     request->entry.key = key;
     request->entry.bool_entry = blackboard::as<bool>(entry)->data_;
   }
 
   if (entry->get_type() == EntryBase::STRING) {
     request->entry.type = blackboard_msgs::msg::Entry::STRING_TYPE;
+    request->entry.parent_key = parent_key;
     request->entry.key = key;
     request->entry.string_entry = blackboard::as<std::string>(entry)->data_;
   }
@@ -87,11 +96,12 @@ BlackBoardClient::get_entry(const std::string & parent_key, const std::string & 
     RCLCPP_ERROR_STREAM(
       client_node_->get_logger(),
       get_entry_client_->get_service_name() <<
-        " service  client: waiting for service to appear...");
+        " service client: waiting for service to appear...");
   }
 
   auto request = std::make_shared<blackboard_msgs::srv::GetEntry::Request>();
 
+  request->parent_key = parent_key;
   request->key = key;
 
   auto future_result = get_entry_client_->async_send_request(request);
@@ -130,6 +140,59 @@ BlackBoardClient::get_entry(const std::string & parent_key, const std::string & 
   }
 
   return ret;
+}
+
+bool BlackBoardClient::exist_parent(const std::string & parent_key)
+{
+  while (!exist_parent_client_->wait_for_service(std::chrono::seconds(5))) {
+    if (!rclcpp::ok()) {
+      return false;
+    }
+    RCLCPP_ERROR_STREAM(
+      client_node_->get_logger(),
+      exist_parent_client_->get_service_name() <<
+        " service client: waiting for service to appear...");
+  }
+
+  auto request = std::make_shared<blackboard_msgs::srv::ExistParent::Request>();
+  request->parent_key = parent_key;
+
+  auto future_result = exist_parent_client_->async_send_request(request);
+
+  if (rclcpp::spin_until_future_complete(client_node_, future_result, std::chrono::seconds(1)) !=
+    rclcpp::FutureReturnCode::SUCCESS)
+  {
+    return false;
+  }
+
+  return future_result.get()->exist;
+}
+
+bool BlackBoardClient::exist_entry(const std::string & parent_key, const std::string & key)
+{
+  while (!exist_entry_client_->wait_for_service(std::chrono::seconds(5))) {
+    if (!rclcpp::ok()) {
+      return false;
+    }
+    RCLCPP_ERROR_STREAM(
+      client_node_->get_logger(),
+      exist_entry_client_->get_service_name() <<
+        " service client: waiting for service to appear...");
+  }
+
+  auto request = std::make_shared<blackboard_msgs::srv::ExistEntry::Request>();
+  request->parent_key = parent_key;
+  request->key = key;
+
+  auto future_result = exist_entry_client_->async_send_request(request);
+
+  if (rclcpp::spin_until_future_complete(client_node_, future_result, std::chrono::seconds(1)) !=
+    rclcpp::FutureReturnCode::SUCCESS)
+  {
+    return false;
+  }
+
+  return future_result.get()->exist;
 }
 
 }  // namespace blackboard

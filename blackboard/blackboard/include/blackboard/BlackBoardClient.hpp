@@ -20,6 +20,8 @@
 
 #include "blackboard_msgs/srv/add_entry.hpp"
 #include "blackboard_msgs/srv/get_entry.hpp"
+#include "blackboard_msgs/srv/exist_parent.hpp"
+#include "blackboard_msgs/srv/exist_entry.hpp"
 
 #include "blackboard/BlackBoardInterface.hpp"
 
@@ -41,6 +43,8 @@ public:
 
   void add_entry(const std::string & parent_key, const std::string & key, EntryBase::Ptr entry);
   EntryBase::Ptr get_entry(const std::string & parent_key, const std::string & key);
+  bool exist_parent(const std::string & parent_key);
+  bool exist_entry(const std::string & parent_key, const std::string & key);
 
 private:
   rclcpp::Node::SharedPtr client_node_;
@@ -49,6 +53,10 @@ private:
     add_entry_client_;
   rclcpp::Client<blackboard_msgs::srv::GetEntry>::SharedPtr
     get_entry_client_;
+  rclcpp::Client<blackboard_msgs::srv::ExistParent>::SharedPtr
+    exist_parent_client_;
+  rclcpp::Client<blackboard_msgs::srv::ExistEntry>::SharedPtr
+    exist_entry_client_;
 };
 
 }  // namespace blackboard

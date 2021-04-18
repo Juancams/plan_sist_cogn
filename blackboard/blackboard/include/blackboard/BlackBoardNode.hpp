@@ -19,6 +19,8 @@
 
 #include "blackboard_msgs/srv/add_entry.hpp"
 #include "blackboard_msgs/srv/get_entry.hpp"
+#include "blackboard_msgs/srv/exist_parent.hpp"
+#include "blackboard_msgs/srv/exist_entry.hpp"
 
 #include "blackboard/BlackBoard.hpp"
 
@@ -48,6 +50,16 @@ public:
     const std::shared_ptr<blackboard_msgs::srv::GetEntry::Request> request,
     const std::shared_ptr<blackboard_msgs::srv::GetEntry::Response> response);
 
+  void exist_parent_service_callback(
+    const std::shared_ptr<rmw_request_id_t> request_header,
+    const std::shared_ptr<blackboard_msgs::srv::ExistParent::Request> request,
+    const std::shared_ptr<blackboard_msgs::srv::ExistParent::Response> response);
+
+  void exist_entry_service_callback(
+    const std::shared_ptr<rmw_request_id_t> request_header,
+    const std::shared_ptr<blackboard_msgs::srv::ExistEntry::Request> request,
+    const std::shared_ptr<blackboard_msgs::srv::ExistEntry::Response> response);
+
 private:
   BlackBoard blackboard_;
 
@@ -56,6 +68,12 @@ private:
 
   rclcpp::Service<blackboard_msgs::srv::GetEntry>::SharedPtr
     get_entry_service_;
+
+  rclcpp::Service<blackboard_msgs::srv::ExistParent>::SharedPtr
+    exist_parent_service_;
+
+  rclcpp::Service<blackboard_msgs::srv::ExistEntry>::SharedPtr
+    exist_entry_service_;
 };
 
 }  // namespace blackboard
