@@ -58,6 +58,28 @@ TEST(blackboard, check_entry_parent)
   ASSERT_TRUE(exists_entry_2);
 }
 
+TEST(blackboard, rm_and_modify)
+{
+  auto blackboard = blackboard::BlackBoard::make_shared();
+
+  auto entry_1 = blackboard::Entry<std::string>::make_shared("will_be_removed");
+  auto entry_2 = blackboard::Entry<std::string>::make_shared("will_rm_parent");
+
+  blackboard->add_entry("parent1", "to_remove", entry_1->to_base());
+  blackboard->add_entry("parent2", "to_rm_parent", entry_2->to_base());
+
+  blackboard->remove_entry("parent1", "to_remove");
+  blackboard->remove_parent("parent2");
+
+  auto removed_entry = blackboard->exist_entry("parent1", "to_remove");
+  auto removed_parent = blackboard->exist_parent("parent2");
+  auto removed_parent_entry = blackboard->exist_entry("parent2", "to_rm_parent");
+
+  ASSERT_FALSE(removed_entry);
+  ASSERT_FALSE(removed_parent);
+  ASSERT_FALSE(removed_parent_entry);
+}
+
 int main(int argc, char ** argv)
 {
   testing::InitGoogleTest(&argc, argv);

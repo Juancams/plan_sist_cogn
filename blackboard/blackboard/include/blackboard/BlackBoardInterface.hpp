@@ -83,6 +83,8 @@ public:
   virtual EntryBase::Ptr get_entry(const std::string & parent_key, const std::string & key) = 0;
   virtual bool exist_parent(const std::string & parent_key) = 0;
   virtual bool exist_entry(const std::string & parent_key, const std::string & key) = 0;
+  virtual void remove_entry(const std::string & parent_key, const std::string & key) = 0;
+  virtual void remove_parent(const std::string & parent_key) = 0;
 };
 
 }  // namespace blackboard

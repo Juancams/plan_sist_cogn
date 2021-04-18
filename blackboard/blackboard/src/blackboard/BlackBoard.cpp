@@ -51,4 +51,21 @@ BlackBoard::exist_entry(const std::string & parent_key, const std::string & key)
          (entries_[parent_key].find(key) != entries_[parent_key].end());
 }
 
+void
+BlackBoard::remove_entry(const std::string & parent_key, const std::string & key)
+{
+  if (BlackBoard::exist_entry(parent_key, key)) {
+    entries_[parent_key].erase(key);
+  }
+}
+
+void
+BlackBoard::remove_parent(const std::string & parent_key)
+{
+  if (BlackBoard::exist_parent(parent_key)) {
+    entries_[parent_key].clear();
+    entries_.erase(parent_key);
+  }
+}
+
 }  // namespace blackboard

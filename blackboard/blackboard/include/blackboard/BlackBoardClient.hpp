@@ -45,6 +45,8 @@ public:
   EntryBase::Ptr get_entry(const std::string & parent_key, const std::string & key);
   bool exist_parent(const std::string & parent_key);
   bool exist_entry(const std::string & parent_key, const std::string & key);
+  void remove_entry(const std::string & parent_key, const std::string & key);
+  void remove_parent(const std::string & parent_key);
 
 private:
   rclcpp::Node::SharedPtr client_node_;
@@ -57,6 +59,10 @@ private:
     exist_parent_client_;
   rclcpp::Client<blackboard_msgs::srv::ExistEntry>::SharedPtr
     exist_entry_client_;
+  rclcpp::Client<blackboard_msgs::srv::RemoveParent>::SharedPtr
+    remove_parent_client_;
+  rclcpp::Client<blackboard_msgs::srv::RemoveEntry>::SharedPtr
+    remove_entry_client_;
 };
 
 }  // namespace blackboard

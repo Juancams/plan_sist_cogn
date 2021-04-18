@@ -66,8 +66,6 @@ TEST(blackboard, check_entry_parent)
     });
 
   auto entry_1 = blackboard::Entry<bool>::make_shared(true);
-
-  auto entry_base = entry_1->to_base();
   auto entry_2 = blackboard::Entry<std::string>::make_shared("Hi!!");
 
   client_1->add_entry("room", "my_entry_1", entry_1->to_base());
@@ -82,6 +80,40 @@ TEST(blackboard, check_entry_parent)
   ASSERT_FALSE(unreal_parent);
   ASSERT_TRUE(exists_parent_1);
   ASSERT_TRUE(exists_entry_2);
+
+  finish = true;
+  t.join();
+}
+
+TEST(blackboard_node, rm_and_modify)
+{
+  auto blackboard = blackboard::BlackBoardNode::make_shared();
+  auto client_1 = blackboard::BlackBoardClient::make_shared();
+
+  rclcpp::executors::MultiThreadedExecutor exe(rclcpp::executor::ExecutorArgs(), 8);
+  exe.add_node(blackboard->get_node_base_interface());
+
+  bool finish = false;
+  std::thread t([&]() {
+      while (!finish) {exe.spin_some();}
+    });
+
+  auto entry_1 = blackboard::Entry<std::string>::make_shared("will_be_removed");
+  auto entry_2 = blackboard::Entry<std::string>::make_shared("will_rm_parent");
+
+  client_1->add_entry("parent1", "to_remove", entry_1->to_base());
+  client_1->add_entry("parent2", "to_rm_parent", entry_2->to_base());
+
+  client_1->remove_entry("parent1", "to_remove");
+  client_1->remove_parent("parent2");
+
+  auto removed_entry = client_1->exist_entry("parent1", "to_remove");
+  auto removed_parent = client_1->exist_parent("parent2");
+  auto removed_parent_entry = client_1->exist_entry("parent2", "to_rm_parent");
+
+  ASSERT_FALSE(removed_entry);
+  ASSERT_FALSE(removed_parent);
+  ASSERT_FALSE(removed_parent_entry);
 
   finish = true;
   t.join();
