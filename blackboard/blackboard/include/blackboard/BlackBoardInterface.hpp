@@ -20,6 +20,7 @@
 #include <string>
 
 #include "geometry_msgs/msg/pose.hpp"
+#include "octomap_msgs/msg/octomap.hpp"
 
 namespace blackboard
 {
@@ -35,6 +36,7 @@ public:
   static const int STRING = 1;
   static const int FLOAT = 2;
   static const int POSE = 3;
+  static const int OCTOMAP = 4;
 
   virtual int get_type() {return type_;}
 
@@ -65,6 +67,8 @@ public:
       type_ = EntryBase::FLOAT;
     } else if (std::is_same<geometry_msgs::msg::Pose, T>::value) {
       type_ = EntryBase::POSE;
+    } else if (std::is_same<octomap_msgs::msg::Octomap, T>::value) {
+      type_ = EntryBase::OCTOMAP;
     }
   }
 

@@ -21,6 +21,7 @@
 #include "blackboard/BlackBoardNode.hpp"
 
 #include "geometry_msgs/msg/pose.hpp"
+#include "octomap_msgs/msg/octomap.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace blackboard
@@ -105,6 +106,13 @@ BlackBoardNode::add_entry_service_callback(
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
       }
       break;
+    case blackboard_msgs::msg::Entry::OCTOMAP_TYPE:
+      {
+        auto entry = blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(
+          request->entry.octomap_entry);
+        blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+      }
+      break;
     default:
       break;
   }
@@ -143,6 +151,12 @@ BlackBoardNode::get_entry_service_callback(
     response->entry.type = blackboard_msgs::msg::Entry::POSE_TYPE;
     response->entry.key = request->key;
     response->entry.pose_entry = blackboard::as<geometry_msgs::msg::Pose>(entry)->data_;
+  }
+
+  if (entry->get_type() == EntryBase::OCTOMAP) {
+    response->entry.type = blackboard_msgs::msg::Entry::OCTOMAP_TYPE;
+    response->entry.key = request->key;
+    response->entry.octomap_entry = blackboard::as<octomap_msgs::msg::Octomap>(entry)->data_;
   }
 
   response->success = true;

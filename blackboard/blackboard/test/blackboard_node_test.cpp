@@ -161,6 +161,42 @@ TEST(blackboard, pose_entry)
   t.join();
 }
 
+TEST(blackboard, octomap_entry)
+{
+  auto blackboard = blackboard::BlackBoardNode::make_shared();
+  auto client_1 = blackboard::BlackBoardClient::make_shared();
+
+  rclcpp::executors::MultiThreadedExecutor exe(rclcpp::executor::ExecutorArgs(), 8);
+  exe.add_node(blackboard->get_node_base_interface());
+
+  bool finish = false;
+  std::thread t([&]() {
+      while (!finish) {exe.spin_some();}
+    });
+
+  octomap_msgs::msg::Octomap fake_octomap;
+
+  fake_octomap.binary = true;
+  fake_octomap.id = "fake_bathroom";
+  fake_octomap.resolution = 1.5;
+  fake_octomap.data = {4, 8, 2, 9, 45, 57, 12, 59};
+
+  auto entry_1 = blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(fake_octomap);
+  client_1->add_entry("bathroom", "octomap", entry_1->to_base());
+
+  auto entry_1_got =
+    blackboard::as<octomap_msgs::msg::Octomap>(client_1->get_entry("bathroom", "octomap"));
+
+  ASSERT_EQ(entry_1_got->data_.binary, true);
+  ASSERT_EQ(entry_1_got->data_.id, "fake_bathroom");
+  ASSERT_EQ(entry_1_got->data_.resolution, 1.5);
+  ASSERT_EQ(entry_1_got->data_.data, fake_octomap.data);
+  ASSERT_NE(entry_1_got->data_.binary, false);
+
+  finish = true;
+  t.join();
+}
+
 int main(int argc, char ** argv)
 {
   testing::InitGoogleTest(&argc, argv);

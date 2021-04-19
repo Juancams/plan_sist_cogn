@@ -16,6 +16,7 @@
 
   <depend>std_msgs</depend>
   <depend>blackboard_msgs</depend>
+  <depend>octomap_msgs</depend>
   <depend>rclcpp</depend>
 
   <test_depend>ament_lint_common</test_depend>

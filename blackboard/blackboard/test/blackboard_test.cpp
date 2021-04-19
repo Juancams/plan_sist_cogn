@@ -17,6 +17,7 @@
 #include "gtest/gtest.h"
 
 #include "geometry_msgs/msg/pose.hpp"
+#include "octomap_msgs/msg/octomap.hpp"
 #include "blackboard/BlackBoard.hpp"
 
 TEST(blackboard, add_get_entry)
@@ -110,6 +111,30 @@ TEST(blackboard, pose_entry)
   pose_1.orientation.x = -0.05;
 
   ASSERT_NE(entry_1_got->data_.orientation, pose_1.orientation);
+}
+
+TEST(blackboard, octomap_entry)
+{
+  auto blackboard = blackboard::BlackBoard::make_shared();
+
+  octomap_msgs::msg::Octomap fake_octomap;
+
+  fake_octomap.binary = true;
+  fake_octomap.id = "fake_bathroom";
+  fake_octomap.resolution = 1.5;
+  fake_octomap.data = {4, 8, 2, 9, 45, 57, 12, 59};
+
+  auto entry_1 = blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(fake_octomap);
+  blackboard->add_entry("bathroom", "octomap", entry_1->to_base());
+
+  auto entry_1_got =
+    blackboard::as<octomap_msgs::msg::Octomap>(blackboard->get_entry("bathroom", "octomap"));
+
+  ASSERT_EQ(entry_1_got->data_.binary, true);
+  ASSERT_EQ(entry_1_got->data_.id, "fake_bathroom");
+  ASSERT_EQ(entry_1_got->data_.resolution, 1.5);
+  ASSERT_EQ(entry_1_got->data_.data, fake_octomap.data);
+  ASSERT_NE(entry_1_got->data_.binary, false);
 }
 
 int main(int argc, char ** argv)
