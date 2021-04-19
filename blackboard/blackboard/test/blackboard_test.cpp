@@ -23,18 +23,20 @@ TEST(blackboard, add_get_entry)
   auto blackboard = blackboard::BlackBoard::make_shared();
 
   auto entry_1 = blackboard::Entry<bool>::make_shared(true);
-
-  auto entry_base = entry_1->to_base();
   auto entry_2 = blackboard::Entry<std::string>::make_shared("Hi!!");
+  auto entry_3 = blackboard::Entry<float>::make_shared(3.76);
 
   blackboard->add_entry("room", "my_entry_1", entry_1->to_base());
   blackboard->add_entry("room", "my_entry_2", entry_2->to_base());
+  blackboard->add_entry("room", "my_entry_3", entry_3->to_base());
 
   auto entry_1_got = blackboard::as<bool>(blackboard->get_entry("room", "my_entry_1"));
   auto entry_2_got = blackboard::as<std::string>(blackboard->get_entry("room", "my_entry_2"));
+  auto entry_3_got = blackboard::as<float>(blackboard->get_entry("room", "my_entry_3"));
 
   ASSERT_TRUE(entry_1_got->data_);
   ASSERT_EQ(entry_2_got->data_, "Hi!!");
+  ASSERT_EQ(entry_3_got->data_, (float)3.76);
 }
 
 TEST(blackboard, check_entry_parent)

@@ -77,6 +77,13 @@ BlackBoardClient::add_entry(
     request->entry.string_entry = blackboard::as<std::string>(entry)->data_;
   }
 
+  if (entry->get_type() == EntryBase::FLOAT) {
+    request->entry.type = blackboard_msgs::msg::Entry::FLOAT_TYPE;
+    request->entry.parent_key = parent_key;
+    request->entry.key = key;
+    request->entry.float_entry = blackboard::as<float>(entry)->data_;
+  }
+
   auto future_result = add_entry_client_->async_send_request(request);
 
   if (rclcpp::spin_until_future_complete(client_node_, future_result, std::chrono::seconds(1)) !=
@@ -127,6 +134,13 @@ BlackBoardClient::get_entry(const std::string & parent_key, const std::string & 
         {
           ret = blackboard::Entry<std::string>::make_shared(
             future_result.get()->entry.string_entry);
+          return ret;
+        }
+        break;
+      case blackboard_msgs::msg::Entry::FLOAT_TYPE:
+        {
+          ret = blackboard::Entry<float>::make_shared(
+            future_result.get()->entry.float_entry);
           return ret;
         }
         break;

@@ -91,6 +91,12 @@ BlackBoardNode::add_entry_service_callback(
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
       }
       break;
+    case blackboard_msgs::msg::Entry::FLOAT_TYPE:
+      {
+        auto entry = blackboard::Entry<float>::make_shared(request->entry.float_entry);
+        blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+      }
+      break;
     default:
       break;
   }
@@ -117,6 +123,12 @@ BlackBoardNode::get_entry_service_callback(
     response->entry.type = blackboard_msgs::msg::Entry::STRING_TYPE;
     response->entry.key = request->key;
     response->entry.string_entry = blackboard::as<std::string>(entry)->data_;
+  }
+
+  if (entry->get_type() == EntryBase::FLOAT) {
+    response->entry.type = blackboard_msgs::msg::Entry::FLOAT_TYPE;
+    response->entry.key = request->key;
+    response->entry.float_entry = blackboard::as<float>(entry)->data_;
   }
 
   response->success = true;
