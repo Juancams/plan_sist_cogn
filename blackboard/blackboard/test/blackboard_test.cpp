@@ -58,7 +58,7 @@ TEST(blackboard, check_entry_parent)
   ASSERT_TRUE(exists_entry_2);
 }
 
-TEST(blackboard, rm_and_modify)
+TEST(blackboard, remove_entry_parent)
 {
   auto blackboard = blackboard::BlackBoard::make_shared();
 

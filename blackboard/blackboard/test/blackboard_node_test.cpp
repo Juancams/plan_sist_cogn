@@ -85,7 +85,7 @@ TEST(blackboard, check_entry_parent)
   t.join();
 }
 
-TEST(blackboard_node, rm_and_modify)
+TEST(blackboard_node, remove_entry_parent)
 {
   auto blackboard = blackboard::BlackBoardNode::make_shared();
   auto client_1 = blackboard::BlackBoardClient::make_shared();
