@@ -24,7 +24,7 @@ jobs:
         uses: ros-tooling/action-ros-ci@v0.1
         with:
           package-name: scan_fake
-          import-token: ${{ secrets.MY_TOKEN }}
+          import-token: ${{ secrets.CI_TOKEN }}
           target-ros2-distro: foxy
           vcs-repo-file-url: ""
           colcon-mixin-name: coverage-gcc
