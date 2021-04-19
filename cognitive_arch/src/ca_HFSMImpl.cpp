@@ -70,10 +70,12 @@ public:
     problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bedroom1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected bedroom2 corridor1)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bedroom2)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected dinning_room corridor1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 dinning_room)"));
+    problem_expert_->addPredicate(plansys2::Predicate("(connected init corridor1)"));
+    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 init)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected dinning_room kitchen)"));
     problem_expert_->addPredicate(plansys2::Predicate("(connected kitchen dinning_room)"));
+    problem_expert_->addPredicate(plansys2::Predicate("(connected kitchen init)"));
+    problem_expert_->addPredicate(plansys2::Predicate("(connected init kitchen)"));
   }
 
   bool Bedroom1_2_Bathroom1()
