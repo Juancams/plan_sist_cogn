@@ -16,6 +16,7 @@
 
 #include "gtest/gtest.h"
 
+#include "geometry_msgs/msg/pose.hpp"
 #include "blackboard/BlackBoard.hpp"
 
 TEST(blackboard, add_get_entry)
@@ -80,6 +81,35 @@ TEST(blackboard, remove_entry_parent)
   ASSERT_FALSE(removed_entry);
   ASSERT_FALSE(removed_parent);
   ASSERT_FALSE(removed_parent_entry);
+}
+
+TEST(blackboard, pose_entry)
+{
+  auto blackboard = blackboard::BlackBoard::make_shared();
+
+  geometry_msgs::msg::Pose pose_1;
+
+  pose_1.position.x = 3.45;
+  pose_1.position.y = -8.3;
+  pose_1.position.z = 0.0;
+
+  pose_1.orientation.x = 0.05;
+  pose_1.orientation.y = -1.3;
+  pose_1.orientation.z = 3.14;
+  pose_1.orientation.w = 1.0;
+
+  auto entry_1 = blackboard::Entry<geometry_msgs::msg::Pose>::make_shared(pose_1);
+  blackboard->add_entry("house", "location", entry_1->to_base());
+
+  auto entry_1_got =
+    blackboard::as<geometry_msgs::msg::Pose>(blackboard->get_entry("house", "location"));
+
+  ASSERT_EQ(entry_1_got->data_.position, pose_1.position);
+  ASSERT_EQ(entry_1_got->data_.orientation, pose_1.orientation);
+
+  pose_1.orientation.x = -0.05;
+
+  ASSERT_NE(entry_1_got->data_.orientation, pose_1.orientation);
 }
 
 int main(int argc, char ** argv)

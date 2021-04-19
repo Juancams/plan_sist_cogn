@@ -20,6 +20,7 @@
 
 #include "blackboard/BlackBoardNode.hpp"
 
+#include "geometry_msgs/msg/pose.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace blackboard
@@ -97,6 +98,13 @@ BlackBoardNode::add_entry_service_callback(
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
       }
       break;
+    case blackboard_msgs::msg::Entry::POSE_TYPE:
+      {
+        auto entry = blackboard::Entry<geometry_msgs::msg::Pose>::make_shared(
+          request->entry.pose_entry);
+        blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+      }
+      break;
     default:
       break;
   }
@@ -129,6 +137,12 @@ BlackBoardNode::get_entry_service_callback(
     response->entry.type = blackboard_msgs::msg::Entry::FLOAT_TYPE;
     response->entry.key = request->key;
     response->entry.float_entry = blackboard::as<float>(entry)->data_;
+  }
+
+  if (entry->get_type() == EntryBase::POSE) {
+    response->entry.type = blackboard_msgs::msg::Entry::POSE_TYPE;
+    response->entry.key = request->key;
+    response->entry.pose_entry = blackboard::as<geometry_msgs::msg::Pose>(entry)->data_;
   }
 
   response->success = true;

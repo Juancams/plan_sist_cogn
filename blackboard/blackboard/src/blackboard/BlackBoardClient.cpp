@@ -24,6 +24,7 @@
 
 #include "blackboard/BlackBoardClient.hpp"
 
+#include "geometry_msgs/msg/pose.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace blackboard
@@ -84,6 +85,13 @@ BlackBoardClient::add_entry(
     request->entry.float_entry = blackboard::as<float>(entry)->data_;
   }
 
+  if (entry->get_type() == EntryBase::POSE) {
+    request->entry.type = blackboard_msgs::msg::Entry::POSE_TYPE;
+    request->entry.parent_key = parent_key;
+    request->entry.key = key;
+    request->entry.pose_entry = blackboard::as<geometry_msgs::msg::Pose>(entry)->data_;
+  }
+
   auto future_result = add_entry_client_->async_send_request(request);
 
   if (rclcpp::spin_until_future_complete(client_node_, future_result, std::chrono::seconds(1)) !=
@@ -141,6 +149,13 @@ BlackBoardClient::get_entry(const std::string & parent_key, const std::string & 
         {
           ret = blackboard::Entry<float>::make_shared(
             future_result.get()->entry.float_entry);
+          return ret;
+        }
+        break;
+      case blackboard_msgs::msg::Entry::POSE_TYPE:
+        {
+          ret = blackboard::Entry<geometry_msgs::msg::Pose>::make_shared(
+            future_result.get()->entry.pose_entry);
           return ret;
         }
         break;
