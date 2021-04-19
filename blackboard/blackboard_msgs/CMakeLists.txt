@@ -11,6 +11,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
     "msg/Entry.msg"
     "srv/AddEntry.srv"
     "srv/GetEntry.srv"
+    "srv/ExistParent.srv"
+    "srv/ExistEntry.srv"
+    "srv/RemoveParent.srv"
+    "srv/RemoveEntry.srv"
   DEPENDENCIES builtin_interfaces std_msgs
 )
 

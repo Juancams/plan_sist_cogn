@@ -16,7 +16,6 @@
 #include <string>
 #include <memory>
 
-#include "blackboard_msgs/srv/add_entry.hpp"
 #include "blackboard_msgs/msg/entry.hpp"
 
 #include "blackboard/BlackBoardNode.hpp"
@@ -40,6 +39,34 @@ BlackBoardNode::BlackBoardNode()
     "blackboard/get_entry",
     std::bind(
       &BlackBoardNode::get_entry_service_callback,
+      this, std::placeholders::_1, std::placeholders::_2,
+      std::placeholders::_3));
+
+  exist_parent_service_ = create_service<blackboard_msgs::srv::ExistParent>(
+    "blackboard/exist_parent",
+    std::bind(
+      &BlackBoardNode::exist_parent_service_callback,
+      this, std::placeholders::_1, std::placeholders::_2,
+      std::placeholders::_3));
+
+  exist_entry_service_ = create_service<blackboard_msgs::srv::ExistEntry>(
+    "blackboard/exist_entry",
+    std::bind(
+      &BlackBoardNode::exist_entry_service_callback,
+      this, std::placeholders::_1, std::placeholders::_2,
+      std::placeholders::_3));
+
+  remove_parent_service_ = create_service<blackboard_msgs::srv::RemoveParent>(
+    "blackboard/remove_parent",
+    std::bind(
+      &BlackBoardNode::remove_parent_service_callback,
+      this, std::placeholders::_1, std::placeholders::_2,
+      std::placeholders::_3));
+
+  remove_entry_service_ = create_service<blackboard_msgs::srv::RemoveEntry>(
+    "blackboard/remove_entry",
+    std::bind(
+      &BlackBoardNode::remove_entry_service_callback,
       this, std::placeholders::_1, std::placeholders::_2,
       std::placeholders::_3));
 }
@@ -92,6 +119,52 @@ BlackBoardNode::get_entry_service_callback(
     response->entry.string_entry = blackboard::as<std::string>(entry)->data_;
   }
 
+  response->success = true;
+}
+
+void
+BlackBoardNode::exist_parent_service_callback(
+  const std::shared_ptr<rmw_request_id_t> request_header,
+  const std::shared_ptr<blackboard_msgs::srv::ExistParent::Request> request,
+  const std::shared_ptr<blackboard_msgs::srv::ExistParent::Response> response)
+{
+  (void)request_header;
+
+  response->exist = blackboard_.exist_parent(request->parent_key);
+}
+
+void
+BlackBoardNode::exist_entry_service_callback(
+  const std::shared_ptr<rmw_request_id_t> request_header,
+  const std::shared_ptr<blackboard_msgs::srv::ExistEntry::Request> request,
+  const std::shared_ptr<blackboard_msgs::srv::ExistEntry::Response> response)
+{
+  (void)request_header;
+
+  response->exist = blackboard_.exist_entry(request->parent_key, request->key);
+}
+
+void
+BlackBoardNode::remove_parent_service_callback(
+  const std::shared_ptr<rmw_request_id_t> request_header,
+  const std::shared_ptr<blackboard_msgs::srv::RemoveParent::Request> request,
+  const std::shared_ptr<blackboard_msgs::srv::RemoveParent::Response> response)
+{
+  (void)request_header;
+
+  blackboard_.remove_parent(request->parent_key);
+  response->success = true;
+}
+
+void
+BlackBoardNode::remove_entry_service_callback(
+  const std::shared_ptr<rmw_request_id_t> request_header,
+  const std::shared_ptr<blackboard_msgs::srv::RemoveEntry::Request> request,
+  const std::shared_ptr<blackboard_msgs::srv::RemoveEntry::Response> response)
+{
+  (void)request_header;
+
+  blackboard_.remove_entry(request->parent_key, request->key);
   response->success = true;
 }
 

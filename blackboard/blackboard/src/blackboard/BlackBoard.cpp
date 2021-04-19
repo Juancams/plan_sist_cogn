@@ -20,15 +20,52 @@ namespace blackboard
 {
 
 void
-BlackBoard::add_entry(const std::string & parent_key, const std::string & key, EntryBase::Ptr entry)
+BlackBoard::add_entry(
+  const std::string & parent_key, const std::string & key, EntryBase::Ptr entry)
 {
-  entries_[parent_key][key] = entry;
+  if (!exist_entry(parent_key, key)) {
+    entries_[parent_key][key] = entry;
+  }
 }
 
 EntryBase::Ptr
 BlackBoard::get_entry(const std::string & parent_key, const std::string & key)
 {
+  if (!exist_entry(parent_key, key)) {
+    return nullptr;
+  }
+
   return entries_[parent_key][key];
+}
+
+bool
+BlackBoard::exist_parent(const std::string & parent_key)
+{
+  return entries_.find(parent_key) != entries_.end();
+}
+
+bool
+BlackBoard::exist_entry(const std::string & parent_key, const std::string & key)
+{
+  return exist_parent(parent_key) &&
+         (entries_[parent_key].find(key) != entries_[parent_key].end());
+}
+
+void
+BlackBoard::remove_entry(const std::string & parent_key, const std::string & key)
+{
+  if (BlackBoard::exist_entry(parent_key, key)) {
+    entries_[parent_key].erase(key);
+  }
+}
+
+void
+BlackBoard::remove_parent(const std::string & parent_key)
+{
+  if (BlackBoard::exist_parent(parent_key)) {
+    entries_[parent_key].clear();
+    entries_.erase(parent_key);
+  }
 }
 
 }  // namespace blackboard
