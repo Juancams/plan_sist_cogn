@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CA_HFSM_H_
-#define CA_HFSM_H_
+#ifndef COGNITIVE_ARCH__FSM__CA_HFSM_HPP_
+#define COGNITIVE_ARCH__FSM__CA_HFSM_HPP_
 
 #include <string>
 
@@ -101,4 +101,4 @@ private:
 
 }  // namespace cascade_hfsm
 
-#endif  // CA_HFSM_H_
+#endif  // COGNITIVE_ARCH__FSM__CA_HFSM_HPP_
