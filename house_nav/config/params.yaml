@@ -8,7 +8,7 @@ move_param_node:
       bathroom2: [-4.5, -0.6, 0.0]
       bedroom1: [-4.6, 1.75, 0.0]
       bedroom2: [-4.0, -4.0, 0.0]
-      corridor1: [-2.0, 2.0, 0.0]
+      corridor1: [-2.0, 0.3, 0.0]
       kitchen: [1.68, -2.6, 0.0]
       dinning_room: [1.0, 3.0, 0.0]
       next_to_bed: [-3.6, 3.0, 0.0]
