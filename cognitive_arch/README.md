@@ -1,12 +1,10 @@
-# HOUSE NAV
+# COGNITIVE ARCH
 
 ## Description
 
 <p align="justify">
-In this project we have to program the behavior of a robot based on a plansys2 domain. The main task of the robot is to navigate.
+In this project we have to create a blackboard to add knowledge and connected it with a state machine which consists on explore all the house.
 </p>
 
 
-![Image text](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/map.jpg)
-
-[![Watch the video](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/house_nav.jpg)](https://youtu.be/M4NZCo-FR8E)
+![Image text](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/img.jpg)
