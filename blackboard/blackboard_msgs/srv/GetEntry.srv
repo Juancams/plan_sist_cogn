@@ -1,0 +1,5 @@
+string parent_key
+string key
+---
+blackboard_msgs/Entry entry
+bool success
