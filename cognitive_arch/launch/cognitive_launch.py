@@ -27,7 +27,6 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # Get the launch directory
     package_dir = get_package_share_directory('cognitive_arch')
-    house_nav_dir = get_package_share_directory('house_nav')
     bringup_dir = get_package_share_directory('nav2_bringup')
     namespace = LaunchConfiguration('namespace')
     robots_dir = get_package_share_directory('robots')
@@ -58,8 +57,7 @@ def generate_launch_description():
             'plansys2_bringup_launch_monolithic.py')),
         launch_arguments={
           'model_file':
-          package_dir + '/pddl/cognitive_arch_domain.pddl:' +
-          house_nav_dir + '/pddl/house_nav_domain.pddl',
+          package_dir + '/pddl/cognitive_arch_domain.pddl:',
           'namespace': namespace
         }.items()
     )
@@ -87,29 +85,11 @@ def generate_launch_description():
     )
 
     # Specify the actions
-    move_between_rooms_cmd = Node(
-        package='house_nav',
-        executable='move_between_rooms_action_node',
+    move_cmd = Node(
+        package='cognitive_arch',
+        executable='move_action',
         output='screen',
-        parameters=[os.path.join(house_nav_dir, 'config', 'params.yaml')])
-
-    enter_zone_cmd = Node(
-        package='house_nav',
-        executable='enter_zone_action_node',
-        output='screen',
-        parameters=[os.path.join(house_nav_dir, 'config', 'params.yaml')])
-
-    leave_zone_cmd = Node(
-        package='house_nav',
-        executable='leave_zone_action_node',
-        output='screen',
-        parameters=[os.path.join(house_nav_dir, 'config', 'params.yaml')])
-
-    move_between_zones_cmd = Node(
-        package='house_nav',
-        executable='move_between_zones_action_node',
-        output='screen',
-        parameters=[os.path.join(house_nav_dir, 'config', 'params.yaml')])
+        parameters=[os.path.join(package_dir, 'config', 'params.yaml')])
 
     explore_cmd = Node(
         package='cognitive_arch',
@@ -131,10 +111,7 @@ def generate_launch_description():
     ld.add_action(webots)
     ld.add_action(rviz_cmd)
 
-    ld.add_action(move_between_rooms_cmd)
-    ld.add_action(enter_zone_cmd)
-    ld.add_action(leave_zone_cmd)
-    ld.add_action(move_between_zones_cmd)
+    ld.add_action(move_cmd)
     ld.add_action(explore_cmd)
 
     return ld
