@@ -1,4 +1,4 @@
-# Copyright 2019 Intelligent Robotics Lab
+# Copyright 2021 The Rebooters
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -27,6 +27,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # Get the launch directory
     package_dir = get_package_share_directory('cognitive_arch')
+    house_dir = get_package_share_directory('house_nav')
     bringup_dir = get_package_share_directory('nav2_bringup')
     namespace = LaunchConfiguration('namespace')
     robots_dir = get_package_share_directory('robots')
@@ -57,7 +58,7 @@ def generate_launch_description():
             'plansys2_bringup_launch_monolithic.py')),
         launch_arguments={
           'model_file':
-          package_dir + '/pddl/cognitive_arch_domain.pddl:',
+          package_dir + '/pddl/cognitive_arch_domain.pddl',
           'namespace': namespace
         }.items()
     )
@@ -89,7 +90,7 @@ def generate_launch_description():
         package='cognitive_arch',
         executable='move_action',
         output='screen',
-        parameters=[os.path.join(package_dir, 'config', 'params.yaml')])
+        parameters=[os.path.join(house_dir, 'config', 'params.yaml')])
 
     explore_cmd = Node(
         package='cognitive_arch',
