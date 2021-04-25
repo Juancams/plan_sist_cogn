@@ -10,7 +10,7 @@
 (:predicates
   (robot_at ?r - robot ?l - location)
   (explored ?l - location)
-  (connected ?from ?to - location)
+  
 )
 
 ;; Function to move
@@ -22,9 +22,7 @@
       (robot_at ?r ?from)
       ; (robot_available ?r)
     ))
-    (over all(and
-      (connected ?from ?to)
-    ))
+    
   )
   :effect (and
       (at start(and
