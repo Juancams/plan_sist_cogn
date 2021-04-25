@@ -36,31 +36,31 @@ public:
 
   virtual void Bedroom2_code_iterative() {}
   virtual void Bedroom2_code_once() {}
-  virtual void Corridor_code_iterative() {}
-  virtual void Corridor_code_once() {}
+  virtual void Tv_code_iterative() {}
+  virtual void Tv_code_once() {}
   virtual void Bathroom2_code_iterative() {}
   virtual void Bathroom2_code_once() {}
-  virtual void Finished_code_iterative() {}
-  virtual void Finished_code_once() {}
   virtual void Bedroom1_code_iterative() {}
   virtual void Bedroom1_code_once() {}
-  virtual void Kitchen_code_iterative() {}
-  virtual void Kitchen_code_once() {}
-  virtual void Dinning_room_code_iterative() {}
-  virtual void Dinning_room_code_once() {}
-  virtual void Initial_code_iterative() {}
-  virtual void Initial_code_once() {}
   virtual void Bathroom1_code_iterative() {}
   virtual void Bathroom1_code_once() {}
+  virtual void Initial_code_iterative() {}
+  virtual void Initial_code_once() {}
+  virtual void Table_code_iterative() {}
+  virtual void Table_code_once() {}
+  virtual void Finished_code_iterative() {}
+  virtual void Finished_code_once() {}
+  virtual void Kitchen_code_iterative() {}
+  virtual void Kitchen_code_once() {}
 
   virtual bool Bedroom1_2_Bathroom1() {return false;}
-  virtual bool Dinning_room_2_Kitchen() {return false;}
-  virtual bool Corridor_2_Bedroom2() {return false;}
-  virtual bool Bathroom1_2_Finished() {return false;}
+  virtual bool Tv_2_Kitchen() {return false;}
   virtual bool Bedroom2_2_Bathroom2() {return false;}
-  virtual bool Initial_2_Dinning_room() {return false;}
+  virtual bool Initial_2_Table() {return false;}
   virtual bool Bathroom2_2_Bedroom1() {return false;}
-  virtual bool Kitchen_2_Corridor() {return false;}
+  virtual bool Table_2_Tv() {return false;}
+  virtual bool Bathroom1_2_Finished() {return false;}
+  virtual bool Kitchen_2_Bedroom2() {return false;}
 
 
   void tick();
@@ -71,25 +71,25 @@ protected:
 private:
   void deactivateAllDeps();
   void Bedroom2_activateDeps();
-  void Corridor_activateDeps();
+  void Tv_activateDeps();
   void Bathroom2_activateDeps();
-  void Finished_activateDeps();
   void Bedroom1_activateDeps();
-  void Kitchen_activateDeps();
-  void Dinning_room_activateDeps();
-  void Initial_activateDeps();
   void Bathroom1_activateDeps();
+  void Initial_activateDeps();
+  void Table_activateDeps();
+  void Finished_activateDeps();
+  void Kitchen_activateDeps();
 
 
   static const int BEDROOM2 = 0;
-  static const int CORRIDOR = 1;
+  static const int TV = 1;
   static const int BATHROOM2 = 2;
-  static const int FINISHED = 3;
-  static const int BEDROOM1 = 4;
-  static const int KITCHEN = 5;
-  static const int DINNING_ROOM = 6;
-  static const int INITIAL = 7;
-  static const int BATHROOM1 = 8;
+  static const int BEDROOM1 = 3;
+  static const int BATHROOM1 = 4;
+  static const int INITIAL = 5;
+  static const int TABLE = 6;
+  static const int FINISHED = 7;
+  static const int KITCHEN = 8;
 
 
   int state_;
@@ -101,4 +101,4 @@ private:
 
 }  // namespace cascade_hfsm
 
-#endif  // COGNITIVE_ARCH__FSM__CA_HFSM_HPP_
+#endif  // COGNITIVE_ARCH__FSM__CA_HFSM_HPP_"
