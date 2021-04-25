@@ -81,20 +81,20 @@ void ca_HFSM::tick()
         Bathroom2_code_once();
       }
       break;
-    case CORRIDOR:
-      Corridor_code_iterative();
+    case TV:
+      Tv_code_iterative();
 
-      msg.data = "Corridor";
+      msg.data = "Tv";
       state_pub_->publish(msg);
 
-      if (Corridor_2_Bedroom2()) {
+      if (Tv_2_Kitchen()) {
         deactivateAllDeps();
 
-        state_ = BEDROOM2;
+        state_ = KITCHEN;
         state_ts_ = now();
 
-        Bedroom2_activateDeps();
-        Bedroom2_code_once();
+        Kitchen_activateDeps();
+        Kitchen_code_once();
       }
       break;
     case BATHROOM2:
@@ -113,13 +113,6 @@ void ca_HFSM::tick()
         Bedroom1_code_once();
       }
       break;
-    case FINISHED:
-      Finished_code_iterative();
-
-      msg.data = "Finished";
-      state_pub_->publish(msg);
-
-      break;
     case BEDROOM1:
       Bedroom1_code_iterative();
 
@@ -134,54 +127,6 @@ void ca_HFSM::tick()
 
         Bathroom1_activateDeps();
         Bathroom1_code_once();
-      }
-      break;
-    case KITCHEN:
-      Kitchen_code_iterative();
-
-      msg.data = "Kitchen";
-      state_pub_->publish(msg);
-
-      if (Kitchen_2_Corridor()) {
-        deactivateAllDeps();
-
-        state_ = CORRIDOR;
-        state_ts_ = now();
-
-        Corridor_activateDeps();
-        Corridor_code_once();
-      }
-      break;
-    case DINNING_ROOM:
-      Dinning_room_code_iterative();
-
-      msg.data = "Dinning_room";
-      state_pub_->publish(msg);
-
-      if (Dinning_room_2_Kitchen()) {
-        deactivateAllDeps();
-
-        state_ = KITCHEN;
-        state_ts_ = now();
-
-        Kitchen_activateDeps();
-        Kitchen_code_once();
-      }
-      break;
-    case INITIAL:
-      Initial_code_iterative();
-
-      msg.data = "Initial";
-      state_pub_->publish(msg);
-
-      if (Initial_2_Dinning_room()) {
-        deactivateAllDeps();
-
-        state_ = DINNING_ROOM;
-        state_ts_ = now();
-
-        Dinning_room_activateDeps();
-        Dinning_room_code_once();
       }
       break;
     case BATHROOM1:
@@ -200,6 +145,61 @@ void ca_HFSM::tick()
         Finished_code_once();
       }
       break;
+    case INITIAL:
+      Initial_code_iterative();
+
+      msg.data = "Initial";
+      state_pub_->publish(msg);
+
+      if (Initial_2_Table()) {
+        deactivateAllDeps();
+
+        state_ = TABLE;
+        state_ts_ = now();
+
+        Table_activateDeps();
+        Table_code_once();
+      }
+      break;
+    case TABLE:
+      Table_code_iterative();
+
+      msg.data = "Table";
+      state_pub_->publish(msg);
+
+      if (Table_2_Tv()) {
+        deactivateAllDeps();
+
+        state_ = TV;
+        state_ts_ = now();
+
+        Tv_activateDeps();
+        Tv_code_once();
+      }
+      break;
+    case FINISHED:
+      Finished_code_iterative();
+
+      msg.data = "Finished";
+      state_pub_->publish(msg);
+
+      break;
+    case KITCHEN:
+      Kitchen_code_iterative();
+
+      msg.data = "Kitchen";
+      state_pub_->publish(msg);
+
+      if (Kitchen_2_Bedroom2()) {
+        deactivateAllDeps();
+
+        state_ = BEDROOM2;
+        state_ts_ = now();
+
+        Bedroom2_activateDeps();
+        Bedroom2_code_once();
+      }
+      break;
   }
 }
 
@@ -213,7 +213,7 @@ ca_HFSM::Bedroom2_activateDeps()
 {
 }
 void
-ca_HFSM::Corridor_activateDeps()
+ca_HFSM::Tv_activateDeps()
 {
 }
 void
@@ -221,19 +221,11 @@ ca_HFSM::Bathroom2_activateDeps()
 {
 }
 void
-ca_HFSM::Finished_activateDeps()
-{
-}
-void
 ca_HFSM::Bedroom1_activateDeps()
 {
 }
 void
-ca_HFSM::Kitchen_activateDeps()
-{
-}
-void
-ca_HFSM::Dinning_room_activateDeps()
+ca_HFSM::Bathroom1_activateDeps()
 {
 }
 void
@@ -241,7 +233,15 @@ ca_HFSM::Initial_activateDeps()
 {
 }
 void
-ca_HFSM::Bathroom1_activateDeps()
+ca_HFSM::Table_activateDeps()
+{
+}
+void
+ca_HFSM::Finished_activateDeps()
+{
+}
+void
+ca_HFSM::Kitchen_activateDeps()
 {
 }
 

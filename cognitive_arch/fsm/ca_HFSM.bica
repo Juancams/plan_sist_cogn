@@ -1,19 +1,19 @@
 <component id="ca_HFSM">
- <state initial="false" id="Bedroom2" x="-759" y="-348"/>
- <state initial="false" id="Corridor" x="-944" y="-346"/>
- <state initial="false" id="Bathroom2" x="-567" y="-348"/>
- <state initial="false" id="Finished" x="-397" y="-664"/>
- <state initial="false" id="Bedroom1" x="-396" y="-354"/>
- <state initial="false" id="Kitchen" x="-1158" y="-348"/>
- <state initial="false" id="Dinning_room" x="-1156" y="-507"/>
- <state initial="true" id="Initial" x="-1152" y="-661"/>
- <state initial="false" id="Bathroom1" x="-398" y="-494"/>
- <transition src="Bedroom1" dst="Bathroom1"/>
- <transition src="Dinning_room" dst="Kitchen"/>
- <transition src="Corridor" dst="Bedroom2"/>
- <transition src="Bathroom1" dst="Finished"/>
- <transition src="Bedroom2" dst="Bathroom2"/>
- <transition src="Initial" dst="Dinning_room"/>
- <transition src="Bathroom2" dst="Bedroom1"/>
- <transition src="Kitchen" dst="Corridor"/>
+ <state x="-759" initial="false" id="Bedroom2" y="-348"/>
+ <state x="-1158" initial="false" id="Tv" y="-348"/>
+ <state x="-567" initial="false" id="Bathroom2" y="-348"/>
+ <state x="-396" initial="false" id="Bedroom1" y="-354"/>
+ <state x="-398" initial="false" id="Bathroom1" y="-494"/>
+ <state x="-1152" initial="true" id="Initial" y="-661"/>
+ <state x="-1156" initial="false" id="Table" y="-507"/>
+ <state x="-397" initial="false" id="Finished" y="-664"/>
+ <state x="-960" initial="false" id="Kitchen" y="-346"/>
+ <transition dst="Bathroom1" src="Bedroom1"/>
+ <transition dst="Kitchen" src="Tv"/>
+ <transition dst="Bathroom2" src="Bedroom2"/>
+ <transition dst="Table" src="Initial"/>
+ <transition dst="Bedroom1" src="Bathroom2"/>
+ <transition dst="Tv" src="Table"/>
+ <transition dst="Finished" src="Bathroom1"/>
+ <transition dst="Bedroom2" src="Kitchen"/>
 </component>

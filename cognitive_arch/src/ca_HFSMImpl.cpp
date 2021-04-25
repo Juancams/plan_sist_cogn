@@ -46,36 +46,17 @@ public:
   {
     problem_expert_->addInstance(plansys2::Instance{"r2d2", "robot"});
 
-    problem_expert_->addInstance(plansys2::Instance{"bedroom2", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"bedroom1", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"bathroom1", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"bathroom2", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"kitchen", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"dinning_room", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"init", "room"});
-    problem_expert_->addInstance(plansys2::Instance{"zone1", "zone"});
-
-    problem_expert_->addInstance(plansys2::Instance{"corridor1", "corridor"});
+    problem_expert_->addInstance(plansys2::Instance{"bedroom2", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"bedroom1", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"bathroom1", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"bathroom2", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"kitchen", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"table", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"tv", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"init", "location"});
+    problem_expert_->addInstance(plansys2::Instance{"corridor1", "location"});
 
     problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(robot_out_zone r2d2)"));
-
-    problem_expert_->addPredicate(plansys2::Predicate("(connected init dinning_room)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected dinning_room init)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bathroom1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected bathroom1 corridor1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bathroom2)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected bathroom2 corridor1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected bedroom1 corridor1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bedroom1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected bedroom2 corridor1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 bedroom2)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected init corridor1)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected corridor1 init)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected dinning_room kitchen)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected kitchen dinning_room)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected kitchen init)"));
-    problem_expert_->addPredicate(plansys2::Predicate("(connected init kitchen)"));
   }
 
   bool Bedroom1_2_Bathroom1()
@@ -83,17 +64,7 @@ public:
     return !executor_client_->execute_and_check_plan();
   }
 
-  bool Dinning_room_2_Kitchen()
-  {
-    return !executor_client_->execute_and_check_plan();
-  }
-
-  bool Corridor_2_Bedroom2()
-  {
-    return !executor_client_->execute_and_check_plan();
-  }
-
-  bool Bathroom1_2_Finished()
+  bool Tv_2_Kitchen()
   {
     return !executor_client_->execute_and_check_plan();
   }
@@ -103,7 +74,7 @@ public:
     return !executor_client_->execute_and_check_plan();
   }
 
-  bool Initial_2_Dinning_room()
+  bool Initial_2_Table()
   {
     return true;
   }
@@ -113,37 +84,48 @@ public:
     return !executor_client_->execute_and_check_plan();
   }
 
-  bool Kitchen_2_Corridor()
+  bool Table_2_Tv()
+  {
+    return !executor_client_->execute_and_check_plan();
+  }
+
+  bool Bathroom1_2_Finished()
+  {
+    return !executor_client_->execute_and_check_plan();
+  }
+
+  bool Kitchen_2_Bedroom2()
   {
     return !executor_client_->execute_and_check_plan();
   }
 
   void Initial_code_iterative() {}
   void Initial_code_once() {}
-  void Dinning_room_code_iterative() {}
-  void Dinning_room_code_once()
+  void Table_code_iterative() {}
+  void Table_code_once()
   {
-    problem_expert_->setGoal(plansys2::Goal("(and(explored dinning_room))"));
+    problem_expert_->setGoal(plansys2::Goal("(and(explored table))"));
+    executor_client_->start_plan_execution();
+  }
+  void Tv_code_iterative() {}
+  void Tv_code_once()
+  {
+    RCLCPP_INFO(get_logger(), "Table explored");
+    problem_expert_->setGoal(plansys2::Goal("(and(explored tv))"));
     executor_client_->start_plan_execution();
   }
   void Kitchen_code_iterative() {}
   void Kitchen_code_once()
   {
-    RCLCPP_INFO(get_logger(), "Dinning room explored");
+    RCLCPP_INFO(get_logger(), "Tv explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored kitchen))"));
     executor_client_->start_plan_execution();
   }
-  void Corridor_code_iterative() {}
-  void Corridor_code_once()
-  {
-    RCLCPP_INFO(get_logger(), "Kitchen explored");
-    problem_expert_->setGoal(plansys2::Goal("(and(explored corridor1))"));
-    executor_client_->start_plan_execution();
-  }
+
   void Bedroom2_code_iterative() {}
   void Bedroom2_code_once()
   {
-    RCLCPP_INFO(get_logger(), "Corridor explored");
+    RCLCPP_INFO(get_logger(), "Kitchen explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored bedroom2))"));
     executor_client_->start_plan_execution();
   }

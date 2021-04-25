@@ -34,6 +34,7 @@ include_directories(fsm include)
 
 add_library(${PROJECT_NAME} SHARED
   src/cognitive_arch/Explore.cpp
+  src/cognitive_arch/Move.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
@@ -44,8 +45,10 @@ add_executable(hfsm_main
 )
 
 add_executable(explore_action src/explore_action.cpp)
+add_executable(move_action src/move_action.cpp)
 
 target_link_libraries(explore_action ${PROJECT_NAME})
+target_link_libraries(move_action ${PROJECT_NAME})
 
 install(DIRECTORY launch pddl rviz DESTINATION share/${PROJECT_NAME})
 
@@ -57,7 +60,7 @@ ament_target_dependencies(hfsm_main ${dependencies})
 install(TARGETS
   ${PROJECT_NAME}
   hfsm_main
-
+  move_action
   explore_action
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
