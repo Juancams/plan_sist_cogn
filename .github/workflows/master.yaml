@@ -23,7 +23,7 @@ jobs:
       - name: test
         uses: ros-tooling/action-ros-ci@v0.1
         with:
-          package-name: scan_fake blackboard
+          package-name: scan_fake blackboard cognitive_arch
           import-token: ${{ secrets.CI_TOKEN }}
           target-ros2-distro: foxy
           vcs-repo-file-url: ""
