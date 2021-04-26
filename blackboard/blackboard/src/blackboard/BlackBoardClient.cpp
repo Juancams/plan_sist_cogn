@@ -24,7 +24,7 @@
 
 #include "blackboard/BlackBoardClient.hpp"
 
-#include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "octomap_msgs/msg/octomap.hpp"
 #include "rclcpp/rclcpp.hpp"
 
@@ -86,11 +86,12 @@ BlackBoardClient::add_entry(
     request->entry.float_entry = blackboard::as<float>(entry)->data_;
   }
 
-  if (entry->get_type() == EntryBase::POSE) {
-    request->entry.type = blackboard_msgs::msg::Entry::POSE_TYPE;
+  if (entry->get_type() == EntryBase::POSESTAMPED) {
+    request->entry.type = blackboard_msgs::msg::Entry::POSESTAMPED_TYPE;
     request->entry.parent_key = parent_key;
     request->entry.key = key;
-    request->entry.pose_entry = blackboard::as<geometry_msgs::msg::Pose>(entry)->data_;
+    request->entry.posestamped_entry =
+      blackboard::as<geometry_msgs::msg::PoseStamped>(entry)->data_;
   }
 
   if (entry->get_type() == EntryBase::OCTOMAP) {
@@ -160,10 +161,10 @@ BlackBoardClient::get_entry(const std::string & parent_key, const std::string & 
           return ret;
         }
         break;
-      case blackboard_msgs::msg::Entry::POSE_TYPE:
+      case blackboard_msgs::msg::Entry::POSESTAMPED_TYPE:
         {
-          ret = blackboard::Entry<geometry_msgs::msg::Pose>::make_shared(
-            future_result.get()->entry.pose_entry);
+          ret = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(
+            future_result.get()->entry.posestamped_entry);
           return ret;
         }
         break;
