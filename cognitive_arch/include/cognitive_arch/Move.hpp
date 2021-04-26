@@ -28,6 +28,8 @@
 #include "nav2_msgs/action/navigate_to_pose.hpp"
 
 #include "plansys2_executor/ActionExecutorClient.hpp"
+#include "blackboard/BlackBoardNode.hpp"
+#include "blackboard/BlackBoardClient.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
@@ -46,8 +48,6 @@ protected:
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_activate(const rclcpp_lifecycle::State & previous_state);
-
-  std::map<std::string, geometry_msgs::msg::PoseStamped> waypoints_;
 
   using NavigationGoalHandle =
     rclcpp_action::ClientGoalHandle<nav2_msgs::action::NavigateToPose>;
