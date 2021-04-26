@@ -17,7 +17,7 @@ This is the diagram of the robot exploration
 This is an image of the communication between the nodes and the blackboard
 </p>
 
-![Image text](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/blackboard.jpg)
+![Image text](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/blackboard.jpeg)
 
 
 <p align="justify">
@@ -29,7 +29,7 @@ You can watch the video here
 ## How to use?
 
 ```console
-ros2 launch cognitive_arch cognitive_launch.py
 ros2 run blackboard blackboard_main
+ros2 launch cognitive_arch cognitive_launch.py
 ros2 run cognitive_arch hfsm_main
 ```
