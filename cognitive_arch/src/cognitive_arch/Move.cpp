@@ -23,36 +23,6 @@ namespace cognitive_arch
 Move::Move(const std::string & name, const std::chrono::nanoseconds & rate)
 : plansys2::ActionExecutorClient(name, rate)
 {
-  auto node = rclcpp::Node::make_shared("move_param_node");
-  node->declare_parameter("waypoints");
-  node->declare_parameter("waypoint_coords");
-
-  if (node->has_parameter("waypoints")) {
-    std::vector<std::string> wp_names;
-    node->get_parameter_or("waypoints", wp_names, {});
-
-    for (auto & wp : wp_names) {
-      node->declare_parameter("waypoint_coords." + wp);
-      std::vector<double> coords;
-
-      if (node->get_parameter_or("waypoint_coords." + wp, coords, {})) {
-        geometry_msgs::msg::PoseStamped wp_pose;
-        wp_pose.header.frame_id = "/map";
-        wp_pose.header.stamp = now();
-        wp_pose.pose.position.x = coords[0];
-        wp_pose.pose.position.y = coords[1];
-        wp_pose.pose.position.z = coords[2];
-        wp_pose.pose.orientation.x = 0.0;
-        wp_pose.pose.orientation.y = 0.0;
-        wp_pose.pose.orientation.z = 0.0;
-        wp_pose.pose.orientation.w = 1.0;
-        waypoints_[wp] = wp_pose;
-      } else {
-        std::cerr << "No coordinate configured for waypoint [" << wp << "]" << std::endl;
-      }
-    }
-  }
-
   using namespace std::placeholders;
   pos_sub_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "/amcl_pose",
@@ -86,7 +56,14 @@ Move::on_activate(const rclcpp_lifecycle::State & previous_state)
   auto wp_to_navigate = get_arguments()[2];  // The goal is in the 3rd argument of the action
 
   RCLCPP_INFO(get_logger(), "Start navigation to [%s]", wp_to_navigate.c_str());
-  goal_pos_ = waypoints_[wp_to_navigate];
+
+  auto blackboard = blackboard::BlackBoardNode::make_shared();
+  auto client = blackboard::BlackBoardClient::make_shared();
+
+  auto wp =
+    blackboard::as<geometry_msgs::msg::PoseStamped>(client->get_entry(wp_to_navigate, "location"));
+
+  goal_pos_ = wp->data_;
 
   navigation_goal_.pose = goal_pos_;
   dist_to_move = getDistance(goal_pos_.pose, current_pos_);

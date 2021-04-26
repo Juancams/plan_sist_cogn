@@ -19,7 +19,7 @@
 #include "blackboard/BlackBoardNode.hpp"
 #include "blackboard/BlackBoardClient.hpp"
 
-#include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 TEST(blackboard_node, add_get_entry)
@@ -133,29 +133,31 @@ TEST(blackboard, pose_entry)
       while (!finish) {exe.spin_some();}
     });
 
-  geometry_msgs::msg::Pose pose_1;
+  geometry_msgs::msg::PoseStamped pose_1;
 
-  pose_1.position.x = 3.45;
-  pose_1.position.y = -8.3;
-  pose_1.position.z = 0.0;
+  pose_1.header.frame_id = "/map";
 
-  pose_1.orientation.x = 0.05;
-  pose_1.orientation.y = -1.3;
-  pose_1.orientation.z = 3.14;
-  pose_1.orientation.w = 1.0;
+  pose_1.pose.position.x = 3.45;
+  pose_1.pose.position.y = -8.3;
+  pose_1.pose.position.z = 0.0;
 
-  auto entry_1 = blackboard::Entry<geometry_msgs::msg::Pose>::make_shared(pose_1);
+  pose_1.pose.orientation.x = 0.05;
+  pose_1.pose.orientation.y = -1.3;
+  pose_1.pose.orientation.z = 3.14;
+  pose_1.pose.orientation.w = 1.0;
+
+  auto entry_1 = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(pose_1);
   client_1->add_entry("house", "location", entry_1->to_base());
 
   auto entry_1_got =
-    blackboard::as<geometry_msgs::msg::Pose>(client_1->get_entry("house", "location"));
+    blackboard::as<geometry_msgs::msg::PoseStamped>(client_1->get_entry("house", "location"));
 
-  ASSERT_EQ(entry_1_got->data_.position, pose_1.position);
-  ASSERT_EQ(entry_1_got->data_.orientation, pose_1.orientation);
+  ASSERT_EQ(entry_1_got->data_.pose.position, pose_1.pose.position);
+  ASSERT_EQ(entry_1_got->data_.pose.orientation, pose_1.pose.orientation);
 
-  pose_1.orientation.x = -0.05;
+  pose_1.pose.orientation.x = -0.05;
 
-  ASSERT_NE(entry_1_got->data_.orientation, pose_1.orientation);
+  ASSERT_NE(entry_1_got->data_.pose.orientation, pose_1.pose.orientation);
 
   finish = true;
   t.join();
