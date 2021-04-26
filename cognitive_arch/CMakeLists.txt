@@ -7,6 +7,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(blackboard REQUIRED)
+find_package(blackboard_msgs REQUIRED)
 find_package(plansys2_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -21,6 +23,8 @@ set(dependencies
   std_msgs
   rclcpp_action
   geometry_msgs
+  blackboard
+  blackboard_msgs
   plansys2_msgs
   nav2_msgs
   rclcpp_cascade_lifecycle
@@ -46,11 +50,13 @@ add_executable(hfsm_main
 
 add_executable(explore_action src/explore_action.cpp)
 add_executable(move_action src/move_action.cpp)
+add_executable(blackboard_init src/blackboard_init.cpp)
 
 target_link_libraries(explore_action ${PROJECT_NAME})
 target_link_libraries(move_action ${PROJECT_NAME})
+target_link_libraries(blackboard_init ${PROJECT_NAME})
 
-install(DIRECTORY launch pddl rviz DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY launch pddl rviz config DESTINATION share/${PROJECT_NAME})
 
 install(DIRECTORY include/
   DESTINATION include/
@@ -62,6 +68,7 @@ install(TARGETS
   hfsm_main
   move_action
   explore_action
+  blackboard_init
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

@@ -27,7 +27,6 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # Get the launch directory
     package_dir = get_package_share_directory('cognitive_arch')
-    house_dir = get_package_share_directory('house_nav')
     bringup_dir = get_package_share_directory('nav2_bringup')
     namespace = LaunchConfiguration('namespace')
     robots_dir = get_package_share_directory('robots')
@@ -86,16 +85,21 @@ def generate_launch_description():
     )
 
     # Specify the actions
+    blackboard_init_cmd = Node(
+        package='cognitive_arch',
+        executable='blackboard_init',
+        output='screen',
+        parameters=[os.path.join(package_dir, 'config', 'params.yaml')])
+
     move_cmd = Node(
         package='cognitive_arch',
         executable='move_action',
         output='screen',
-        parameters=[os.path.join(house_dir, 'config', 'params.yaml')])
+        parameters=[])
 
     explore_cmd = Node(
         package='cognitive_arch',
         executable='explore_action',
-        name='explore_action',
         output='screen',
         parameters=[])
 
@@ -112,6 +116,7 @@ def generate_launch_description():
     ld.add_action(webots)
     ld.add_action(rviz_cmd)
 
+    ld.add_action(blackboard_init_cmd)
     ld.add_action(move_cmd)
     ld.add_action(explore_cmd)
 
