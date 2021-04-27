@@ -57,7 +57,6 @@ Move::on_activate(const rclcpp_lifecycle::State & previous_state)
 
   RCLCPP_INFO(get_logger(), "Start navigation to [%s]", wp_to_navigate.c_str());
 
-  auto blackboard = blackboard::BlackBoardNode::make_shared();
   auto client = blackboard::BlackBoardClient::make_shared();
 
   auto wp =
