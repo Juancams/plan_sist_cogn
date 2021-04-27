@@ -23,7 +23,6 @@
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto blackboard = blackboard::BlackBoardNode::make_shared();
   auto client = blackboard::BlackBoardClient::make_shared();
 
   auto node = rclcpp::Node::make_shared("move_param_node");
@@ -57,13 +56,6 @@ int main(int argc, char ** argv)
       }
     }
   }
-
-  rclcpp::executors::MultiThreadedExecutor exe(rclcpp::executor::ExecutorArgs(), 8);
-  exe.add_node(blackboard->get_node_base_interface());
-
-  exe.spin_some();
-
-  rclcpp::shutdown();
 
   return 0;
 }
