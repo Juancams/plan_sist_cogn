@@ -71,6 +71,9 @@ BlackBoardNode::BlackBoardNode()
       &BlackBoardNode::remove_entry_service_callback,
       this, std::placeholders::_1, std::placeholders::_2,
       std::placeholders::_3));
+
+  new_entry_pub_ = create_publisher<blackboard_msgs::msg::Entry>(
+    "blackboard", rclcpp::QoS(100).transient_local());
 }
 
 void
@@ -80,23 +83,32 @@ BlackBoardNode::add_entry_service_callback(
   const std::shared_ptr<blackboard_msgs::srv::AddEntry::Response> response)
 {
   (void)request_header;
+
+  blackboard_msgs::msg::Entry new_entry;
+  new_entry.parent_key = request->entry.parent_key;
+  new_entry.key = request->entry.key;
+  new_entry.type = request->entry.type;
+
   switch (request->entry.type) {
     case blackboard_msgs::msg::Entry::BOOL_TYPE:
       {
         auto entry = blackboard::Entry<bool>::make_shared(request->entry.bool_entry);
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+        new_entry.bool_entry = request->entry.bool_entry;
       }
       break;
     case blackboard_msgs::msg::Entry::STRING_TYPE:
       {
         auto entry = blackboard::Entry<std::string>::make_shared(request->entry.string_entry);
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+        new_entry.string_entry = request->entry.string_entry;
       }
       break;
     case blackboard_msgs::msg::Entry::FLOAT_TYPE:
       {
         auto entry = blackboard::Entry<float>::make_shared(request->entry.float_entry);
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+        new_entry.float_entry = request->entry.float_entry;
       }
       break;
     case blackboard_msgs::msg::Entry::POSESTAMPED_TYPE:
@@ -104,6 +116,7 @@ BlackBoardNode::add_entry_service_callback(
         auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(
           request->entry.posestamped_entry);
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+        new_entry.posestamped_entry = request->entry.posestamped_entry;
       }
       break;
     case blackboard_msgs::msg::Entry::OCTOMAP_TYPE:
@@ -111,12 +124,13 @@ BlackBoardNode::add_entry_service_callback(
         auto entry = blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(
           request->entry.octomap_entry);
         blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+        new_entry.octomap_entry = request->entry.octomap_entry;
       }
       break;
     default:
       break;
   }
-
+  new_entry_pub_->publish(new_entry);
   response->success = true;
 }
 
