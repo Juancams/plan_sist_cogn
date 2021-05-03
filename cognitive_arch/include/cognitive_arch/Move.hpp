@@ -63,6 +63,8 @@ protected:
   geometry_msgs::msg::PoseStamped goal_pos_;
   nav2_msgs::action::NavigateToPose::Goal navigation_goal_;
 
+  blackboard::BlackBoardClient::Ptr client;
+  std::string wp_to_navigate;
   double dist_to_move;
 
 private:
