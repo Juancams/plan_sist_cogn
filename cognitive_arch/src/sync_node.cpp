@@ -12,45 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.#include <memory>
 
-#include <string>
-#include <vector>
 #include <memory>
 
-#include "blackboard/BlackBoardNode.hpp"
-#include "blackboard/BlackBoardClient.hpp"
-#include "blackboard_msgs/msg/entry.hpp"
-
-#include "plansys2_executor/ExecutorClient.hpp"
-#include "plansys2_problem_expert/ProblemExpertClient.hpp"
-
+#include "cognitive_arch/Sync.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 rclcpp::Node::SharedPtr node = nullptr;
 std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
 
-void entriesCallback(const blackboard_msgs::msg::Entry::SharedPtr msg)
-{
-  if (strcmp(msg->key.c_str(), "location") == 0) {
-    RCLCPP_INFO(node->get_logger(), "%s->%s", msg->parent_key.c_str(), msg->key.c_str());
-    problem_expert_->addInstance(plansys2::Instance{msg->parent_key.c_str(), msg->key.c_str()});
-  }
-
-  if (strcmp(msg->key.c_str(), "at") == 0) {
-    RCLCPP_INFO(node->get_logger(), "%s->%s", msg->parent_key.c_str(), "location");
-    problem_expert_->addInstance(plansys2::Instance{msg->parent_key.c_str(), "location"});
-  }
-}
-
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  node = rclcpp::Node::make_shared("add_instances_node");
-  auto node_aux = rclcpp::Node::make_shared("aux_node");
-  problem_expert_ = std::make_shared<plansys2::ProblemExpertClient>(node_aux);
-
-  auto subscription = node->create_subscription<blackboard_msgs::msg::Entry>(
-    "blackboard", rclcpp::QoS(100).transient_local(), entriesCallback);
+  auto node = std::make_shared<cognitive_arch::Sync>();
 
   rclcpp::spin(node);
 

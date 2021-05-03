@@ -39,6 +39,7 @@ include_directories(fsm include)
 add_library(${PROJECT_NAME} SHARED
   src/cognitive_arch/Explore.cpp
   src/cognitive_arch/Move.cpp
+  src/cognitive_arch/Sync.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
