@@ -92,6 +92,8 @@ private:
 
   rclcpp::Service<blackboard_msgs::srv::RemoveEntry>::SharedPtr
     remove_entry_service_;
+
+  rclcpp::Publisher<blackboard_msgs::msg::Entry>::SharedPtr new_entry_pub_;
 };
 
 }  // namespace blackboard
