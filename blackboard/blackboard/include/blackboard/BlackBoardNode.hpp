@@ -16,6 +16,7 @@
 #define BLACKBOARD__BLACKBOARDNODE_HPP_
 
 #include <memory>
+#include <vector>
 
 #include "blackboard_msgs/srv/add_entry.hpp"
 #include "blackboard_msgs/srv/get_entry.hpp"
@@ -23,6 +24,7 @@
 #include "blackboard_msgs/srv/exist_entry.hpp"
 #include "blackboard_msgs/srv/remove_parent.hpp"
 #include "blackboard_msgs/srv/remove_entry.hpp"
+#include "blackboard_msgs/srv/get_key_parents.hpp"
 
 #include "blackboard/BlackBoard.hpp"
 
@@ -72,6 +74,11 @@ public:
     const std::shared_ptr<blackboard_msgs::srv::RemoveEntry::Request> request,
     const std::shared_ptr<blackboard_msgs::srv::RemoveEntry::Response> response);
 
+  void get_key_parents_callback(
+    const std::shared_ptr<rmw_request_id_t> request_header,
+    const std::shared_ptr<blackboard_msgs::srv::GetKeyParents::Request> request,
+    const std::shared_ptr<blackboard_msgs::srv::GetKeyParents::Response> response);
+
 private:
   BlackBoard blackboard_;
 
@@ -92,6 +99,9 @@ private:
 
   rclcpp::Service<blackboard_msgs::srv::RemoveEntry>::SharedPtr
     remove_entry_service_;
+
+  rclcpp::Service<blackboard_msgs::srv::GetKeyParents>::SharedPtr
+    get_key_parents_service_;
 
   rclcpp::Publisher<blackboard_msgs::msg::Entry>::SharedPtr new_entry_pub_;
 };

@@ -16,12 +16,16 @@
 #define BLACKBOARD__BLACKBOARDCLIENT_HPP_
 
 #include <memory>
+#include <vector>
 #include <string>
 
 #include "blackboard_msgs/srv/add_entry.hpp"
 #include "blackboard_msgs/srv/get_entry.hpp"
 #include "blackboard_msgs/srv/exist_parent.hpp"
 #include "blackboard_msgs/srv/exist_entry.hpp"
+#include "blackboard_msgs/srv/remove_parent.hpp"
+#include "blackboard_msgs/srv/remove_entry.hpp"
+#include "blackboard_msgs/srv/get_key_parents.hpp"
 
 #include "blackboard/BlackBoardInterface.hpp"
 
@@ -47,6 +51,7 @@ public:
   bool exist_entry(const std::string & parent_key, const std::string & key);
   void remove_entry(const std::string & parent_key, const std::string & key);
   void remove_parent(const std::string & parent_key);
+  std::vector<std::string> get_key_parents(const std::string & key);
 
 private:
   rclcpp::Node::SharedPtr client_node_;
@@ -63,6 +68,8 @@ private:
     remove_parent_client_;
   rclcpp::Client<blackboard_msgs::srv::RemoveEntry>::SharedPtr
     remove_entry_client_;
+  rclcpp::Client<blackboard_msgs::srv::GetKeyParents>::SharedPtr
+    get_key_parents_client_;
 };
 
 }  // namespace blackboard

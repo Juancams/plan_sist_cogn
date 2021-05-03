@@ -13,6 +13,7 @@
 // limitations under the License.#include <memory>
 
 #include <string>
+#include <vector>
 
 #include "gtest/gtest.h"
 
@@ -136,6 +137,25 @@ TEST(blackboard, octomap_entry)
   ASSERT_EQ(entry_1_got->data_.resolution, 1.5);
   ASSERT_EQ(entry_1_got->data_.data, fake_octomap.data);
   ASSERT_NE(entry_1_got->data_.binary, false);
+}
+
+TEST(blackboard, get_key_parents)
+{
+  auto blackboard = blackboard::BlackBoard::make_shared();
+
+  auto entry_1 = blackboard::Entry<std::string>::make_shared("Good");
+  auto entry_2 = blackboard::Entry<std::string>::make_shared("Intruder");
+  auto entry_3 = blackboard::Entry<std::string>::make_shared("Ok");
+
+  blackboard->add_entry("parent_1", "positive", entry_1->to_base());
+  blackboard->add_entry("parent_2", "negative", entry_2->to_base());
+  blackboard->add_entry("parent_3", "positive", entry_3->to_base());
+
+  auto parents = blackboard->get_key_parents("positive");
+
+  ASSERT_EQ(parents.size(), 2);
+  ASSERT_EQ(parents[0], "parent_1");
+  ASSERT_EQ(parents[1], "parent_3");
 }
 
 int main(int argc, char ** argv)

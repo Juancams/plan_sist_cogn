@@ -16,6 +16,7 @@
 #define BLACKBOARD__BLACKBOARD_HPP_
 
 #include <map>
+#include <vector>
 #include <memory>
 #include <string>
 
@@ -40,6 +41,7 @@ public:
   bool exist_entry(const std::string & parent_key, const std::string & key);
   void remove_entry(const std::string & parent_key, const std::string & key);
   void remove_parent(const std::string & parent_key);
+  std::vector<std::string> get_key_parents(const std::string & key);
 
 protected:
   std::map<std::string, std::map<std::string, EntryBase::Ptr>> entries_;

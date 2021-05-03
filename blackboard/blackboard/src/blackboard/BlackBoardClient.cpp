@@ -13,6 +13,7 @@
 // limitations under the License.#include <memory>
 
 #include <string>
+#include <vector>
 #include <memory>
 
 #include "blackboard_msgs/srv/add_entry.hpp"
@@ -21,6 +22,7 @@
 #include "blackboard_msgs/srv/exist_entry.hpp"
 #include "blackboard_msgs/srv/remove_parent.hpp"
 #include "blackboard_msgs/srv/remove_entry.hpp"
+#include "blackboard_msgs/srv/get_key_parents.hpp"
 
 #include "blackboard/BlackBoardClient.hpp"
 
@@ -47,6 +49,8 @@ BlackBoardClient::BlackBoardClient()
     "blackboard/remove_entry");
   remove_parent_client_ = client_node_->create_client<blackboard_msgs::srv::RemoveParent>(
     "blackboard/remove_parent");
+  get_key_parents_client_ = client_node_->create_client<blackboard_msgs::srv::GetKeyParents>(
+    "blackboard/get_key_parents");
 }
 
 void
@@ -309,6 +313,37 @@ BlackBoardClient::remove_parent(const std::string & parent_key)
       client_node_->get_logger(),
       add_entry_client_->get_service_name() << ": Error");
   }
+}
+
+std::vector<std::string>
+BlackBoardClient::get_key_parents(const std::string & key)
+{
+  std::vector<std::string> ret;
+
+  while (!get_key_parents_client_->wait_for_service(std::chrono::seconds(5))) {
+    if (!rclcpp::ok()) {
+      return ret;
+    }
+    RCLCPP_ERROR_STREAM(
+      client_node_->get_logger(),
+      get_key_parents_client_->get_service_name() <<
+        " service client: waiting for service to appear...");
+  }
+
+  auto request = std::make_shared<blackboard_msgs::srv::GetKeyParents::Request>();
+  request->key = key;
+
+  auto future_result = get_key_parents_client_->async_send_request(request);
+
+  if (rclcpp::spin_until_future_complete(client_node_, future_result, std::chrono::seconds(1)) !=
+    rclcpp::FutureReturnCode::SUCCESS)
+  {
+    return ret;
+  }
+
+  ret = future_result.get()->parents;
+
+  return ret;
 }
 
 }  // namespace blackboard
