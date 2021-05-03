@@ -16,6 +16,9 @@
 
 #include "plansys2_msgs/msg/action_execution_info.hpp"
 
+#include "blackboard/BlackBoardNode.hpp"
+#include "blackboard/BlackBoardClient.hpp"
+
 #include "plansys2_executor/ExecutorClient.hpp"
 #include "plansys2_problem_expert/ProblemExpertClient.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -39,6 +42,7 @@ public:
     node_aux = rclcpp::Node::make_shared("node_aux");
     executor_client_ = std::make_shared<plansys2::ExecutorClient>(node_aux);
     problem_expert_ = std::make_shared<plansys2::ProblemExpertClient>(node_aux);
+    client_ = blackboard::BlackBoardClient::make_shared();
 
     init_knowledge();
   }
@@ -48,44 +52,117 @@ public:
     problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
   }
 
-  bool Bedroom1_2_Bathroom1()
-  {
-    return !executor_client_->execute_and_check_plan();
-  }
-
-  bool Tv_2_Kitchen()
-  {
-    return !executor_client_->execute_and_check_plan();
-  }
-
-  bool Bedroom2_2_Bathroom2()
-  {
-    return !executor_client_->execute_and_check_plan();
-  }
-
   bool Initial_2_Table()
   {
     return true;
   }
 
-  bool Bathroom2_2_Bedroom1()
-  {
-    return !executor_client_->execute_and_check_plan();
-  }
-
   bool Table_2_Tv()
   {
-    return !executor_client_->execute_and_check_plan();
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      return executor_client_->getResult().value().success;
+    }
+    return false;
   }
 
-  bool Bathroom1_2_Finished()
+  bool Tv_2_Kitchen()
   {
-    return !executor_client_->execute_and_check_plan();
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 table)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      return executor_client_->getResult().value().success;
+    }
+    return false;
   }
 
   bool Kitchen_2_Bedroom2()
   {
-    return !executor_client_->execute_and_check_plan();
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 tv)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      return executor_client_->getResult().value().success;
+    }
+    return false;
+  }
+
+  bool Bedroom2_2_Bathroom2()
+  {
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 kitchen)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      return executor_client_->getResult().value().success;
+    }
+    return false;
+  }
+
+  bool Bathroom2_2_Bedroom1()
+  {
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bedroom2)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      executor_client_->start_plan_execution();
+      return executor_client_->getResult().value().success;
+    }
+    return false;
+  }
+
+  bool Bedroom1_2_Bathroom1()
+  {
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bathroom2)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      return executor_client_->getResult().value().success;
+    }
+    return false;
+  }
+
+  bool Bathroom1_2_Finished()
+  {
+    if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
+      if (executor_client_->getResult().value().success) {
+        RCLCPP_INFO(get_logger(), "SUCCESS");
+      } else {
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bedroom1)"));
+        executor_client_->start_plan_execution();
+        RCLCPP_INFO(get_logger(), "FAIL");
+      }
+      return executor_client_->getResult().value().success;
+    }
+    return false;
   }
 
   void Initial_code_iterative() {}
@@ -94,21 +171,30 @@ public:
   void Table_code_once()
   {
     problem_expert_->setGoal(plansys2::Goal("(and(explored table))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
+      executor_client_->start_plan_execution();
+    }
   }
   void Tv_code_iterative() {}
   void Tv_code_once()
   {
     RCLCPP_INFO(get_logger(), "Table explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored tv))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 table)"));
+      executor_client_->start_plan_execution();
+    }
   }
   void Kitchen_code_iterative() {}
   void Kitchen_code_once()
   {
     RCLCPP_INFO(get_logger(), "Tv explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored kitchen))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 tv)"));
+      executor_client_->start_plan_execution();
+    }
   }
 
   void Bedroom2_code_iterative() {}
@@ -116,14 +202,20 @@ public:
   {
     RCLCPP_INFO(get_logger(), "Kitchen explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored bedroom2))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 kitchen)"));
+      executor_client_->start_plan_execution();
+    }
   }
   void Bathroom2_code_iterative() {}
   void Bathroom2_code_once()
   {
     RCLCPP_INFO(get_logger(), "Bedroom2 explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored bathroom2))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bedroom2)"));
+      executor_client_->start_plan_execution();
+    }
   }
 
   void Bedroom1_code_iterative() {}
@@ -131,14 +223,20 @@ public:
   {
     RCLCPP_INFO(get_logger(), "Bathroom2 explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored bedroom1))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bathroom2)"));
+      executor_client_->start_plan_execution();
+    }
   }
   void Bathroom1_code_iterative() {}
   void Bathroom1_code_once()
   {
     RCLCPP_INFO(get_logger(), "Bedroom1 explored");
     problem_expert_->setGoal(plansys2::Goal("(and(explored bathroom1))"));
-    executor_client_->start_plan_execution();
+    while (!executor_client_->start_plan_execution()) {
+      problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bedroom1)"));
+      executor_client_->start_plan_execution();
+    }
   }
   void Finished_code_iterative() {}
   void Finished_code_once()
@@ -150,6 +248,7 @@ private:
   std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
   std::shared_ptr<plansys2::ExecutorClient> executor_client_;
   rclcpp::Node::SharedPtr node_aux;
+  blackboard::BlackBoardClient::Ptr client_;
 };
 
 int main(int argc, char * argv[])

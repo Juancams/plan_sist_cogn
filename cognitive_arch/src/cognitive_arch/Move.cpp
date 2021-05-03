@@ -53,11 +53,11 @@ Move::on_activate(const rclcpp_lifecycle::State & previous_state)
   } while (!is_action_server_ready);
 
   RCLCPP_INFO(get_logger(), "Navigation action server ready");
-  auto wp_to_navigate = get_arguments()[2];  // The goal is in the 3rd argument of the action
+  wp_to_navigate = get_arguments()[2];  // The goal is in the 3rd argument of the action
 
   RCLCPP_INFO(get_logger(), "Start navigation to [%s]", wp_to_navigate.c_str());
 
-  auto client = blackboard::BlackBoardClient::make_shared();
+  client = blackboard::BlackBoardClient::make_shared();
 
   auto wp =
     blackboard::as<geometry_msgs::msg::PoseStamped>(client->get_entry(wp_to_navigate, "location"));
@@ -78,6 +78,10 @@ Move::on_activate(const rclcpp_lifecycle::State & previous_state)
     };
 
   send_goal_options.result_callback = [this](auto) {
+      client->remove_entry("r2d2", "at");
+      auto entry = blackboard::Entry<std::string>::make_shared(wp_to_navigate);
+      client->add_entry("r2d2", "at", entry->to_base());
+
       finish(true, 1.0, "Move completed");
     };
 
