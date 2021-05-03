@@ -45,17 +45,6 @@ public:
   void init_knowledge()
   {
     problem_expert_->addInstance(plansys2::Instance{"r2d2", "robot"});
-
-    problem_expert_->addInstance(plansys2::Instance{"bedroom2", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"bedroom1", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"bathroom1", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"bathroom2", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"kitchen", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"table", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"tv", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"init", "location"});
-    problem_expert_->addInstance(plansys2::Instance{"corridor1", "location"});
-
     problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
   }
 
