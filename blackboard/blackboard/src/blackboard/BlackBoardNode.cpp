@@ -15,6 +15,7 @@
 #include <type_traits>
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "blackboard_msgs/msg/entry.hpp"
 
@@ -134,6 +135,14 @@ BlackBoardNode::add_entry_service_callback(
         new_entry.octomap_entry = request->entry.octomap_entry;
       }
       break;
+    case blackboard_msgs::msg::Entry::VECTOR_DOUBLE_TYPE:
+      {
+        auto entry = blackboard::Entry<std::vector<double>>::make_shared(
+          request->entry.vector_double_entry);
+        blackboard_.add_entry(request->entry.parent_key, request->entry.key, entry->to_base());
+        new_entry.vector_double_entry = request->entry.vector_double_entry;
+      }
+      break;
     default:
       break;
   }
@@ -179,6 +188,12 @@ BlackBoardNode::get_entry_service_callback(
     response->entry.type = blackboard_msgs::msg::Entry::OCTOMAP_TYPE;
     response->entry.key = request->key;
     response->entry.octomap_entry = blackboard::as<octomap_msgs::msg::Octomap>(entry)->data_;
+  }
+
+  if (entry->get_type() == EntryBase::VECTOR_DOUBLE) {
+    response->entry.type = blackboard_msgs::msg::Entry::VECTOR_DOUBLE_TYPE;
+    response->entry.key = request->key;
+    response->entry.vector_double_entry = blackboard::as<std::vector<double>>(entry)->data_;
   }
 
   response->success = true;

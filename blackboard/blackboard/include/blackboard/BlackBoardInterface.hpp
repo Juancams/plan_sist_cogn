@@ -38,6 +38,7 @@ public:
   static const int FLOAT = 2;
   static const int POSESTAMPED = 3;
   static const int OCTOMAP = 4;
+  static const int VECTOR_DOUBLE = 5;
 
   virtual int get_type() {return type_;}
 
@@ -70,6 +71,8 @@ public:
       type_ = EntryBase::POSESTAMPED;
     } else if (std::is_same<octomap_msgs::msg::Octomap, T>::value) {
       type_ = EntryBase::OCTOMAP;
+    } else if (std::is_same<std::vector<double>, T>::value) {
+      type_ = EntryBase::VECTOR_DOUBLE;
     }
   }
 
