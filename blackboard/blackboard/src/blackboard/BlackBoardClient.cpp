@@ -105,6 +105,13 @@ BlackBoardClient::add_entry(
     request->entry.octomap_entry = blackboard::as<octomap_msgs::msg::Octomap>(entry)->data_;
   }
 
+  if (entry->get_type() == EntryBase::VECTOR_DOUBLE) {
+    request->entry.type = blackboard_msgs::msg::Entry::VECTOR_DOUBLE_TYPE;
+    request->entry.parent_key = parent_key;
+    request->entry.key = key;
+    request->entry.vector_double_entry = blackboard::as<std::vector<double>>(entry)->data_;
+  }
+
   auto future_result = add_entry_client_->async_send_request(request);
 
   if (rclcpp::spin_until_future_complete(client_node_, future_result, std::chrono::seconds(1)) !=
@@ -176,6 +183,13 @@ BlackBoardClient::get_entry(const std::string & parent_key, const std::string & 
         {
           ret = blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(
             future_result.get()->entry.octomap_entry);
+          return ret;
+        }
+        break;
+      case blackboard_msgs::msg::Entry::VECTOR_DOUBLE_TYPE:
+        {
+          ret = blackboard::Entry<std::vector<double>>::make_shared(
+            future_result.get()->entry.vector_double_entry);
           return ret;
         }
         break;
