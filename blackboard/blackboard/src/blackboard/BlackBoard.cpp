@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.#include <memory>
 
+#include <memory>
 #include <string>
+#include <vector>
 
 #include "blackboard/BlackBoard.hpp"
 
@@ -66,6 +68,20 @@ BlackBoard::remove_parent(const std::string & parent_key)
     entries_[parent_key].clear();
     entries_.erase(parent_key);
   }
+}
+
+std::vector<std::string>
+BlackBoard::get_key_parents(const std::string & key)
+{
+  std::vector<std::string> parents_list;
+
+  auto it = entries_.begin();
+  for (it; it != entries_.end(); it++) {
+    if (entries_[it->first].find(key) != entries_[it->first].end()) {
+      parents_list.push_back(it->first);
+    }
+  }
+  return parents_list;
 }
 
 }  // namespace blackboard

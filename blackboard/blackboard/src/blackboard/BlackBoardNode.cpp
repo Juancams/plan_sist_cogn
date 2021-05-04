@@ -72,6 +72,13 @@ BlackBoardNode::BlackBoardNode()
       this, std::placeholders::_1, std::placeholders::_2,
       std::placeholders::_3));
 
+  get_key_parents_service_ = create_service<blackboard_msgs::srv::GetKeyParents>(
+    "blackboard/get_key_parents",
+    std::bind(
+      &BlackBoardNode::get_key_parents_callback,
+      this, std::placeholders::_1, std::placeholders::_2,
+      std::placeholders::_3));
+
   new_entry_pub_ = create_publisher<blackboard_msgs::msg::Entry>(
     "blackboard", rclcpp::QoS(100).transient_local());
 }
@@ -220,6 +227,18 @@ BlackBoardNode::remove_entry_service_callback(
   (void)request_header;
 
   blackboard_.remove_entry(request->parent_key, request->key);
+  response->success = true;
+}
+
+void
+BlackBoardNode::get_key_parents_callback(
+  const std::shared_ptr<rmw_request_id_t> request_header,
+  const std::shared_ptr<blackboard_msgs::srv::GetKeyParents::Request> request,
+  const std::shared_ptr<blackboard_msgs::srv::GetKeyParents::Response> response)
+{
+  (void)request_header;
+
+  response->parents = blackboard_.get_key_parents(request->key);
   response->success = true;
 }
 

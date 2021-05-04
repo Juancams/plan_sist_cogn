@@ -39,6 +39,7 @@ include_directories(fsm include)
 add_library(${PROJECT_NAME} SHARED
   src/cognitive_arch/Explore.cpp
   src/cognitive_arch/Move.cpp
+  src/cognitive_arch/Sync.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
@@ -51,10 +52,12 @@ add_executable(hfsm_main
 add_executable(explore_action src/explore_action.cpp)
 add_executable(move_action src/move_action.cpp)
 add_executable(blackboard_init src/blackboard_init.cpp)
+add_executable(sync_node src/sync_node.cpp)
 
 target_link_libraries(explore_action ${PROJECT_NAME})
 target_link_libraries(move_action ${PROJECT_NAME})
 target_link_libraries(blackboard_init ${PROJECT_NAME})
+target_link_libraries(sync_node ${PROJECT_NAME})
 
 install(DIRECTORY launch pddl rviz config DESTINATION share/${PROJECT_NAME})
 
@@ -69,6 +72,7 @@ install(TARGETS
   move_action
   explore_action
   blackboard_init
+  sync_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

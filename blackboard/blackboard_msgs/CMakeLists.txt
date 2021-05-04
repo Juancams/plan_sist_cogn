@@ -17,6 +17,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/ExistEntry.srv"
   "srv/RemoveParent.srv"
   "srv/RemoveEntry.srv"
+  "srv/GetKeyParents.srv"
   DEPENDENCIES builtin_interfaces std_msgs geometry_msgs octomap_msgs
 )
 

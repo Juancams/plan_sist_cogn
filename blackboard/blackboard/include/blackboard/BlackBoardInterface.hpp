@@ -16,6 +16,7 @@
 #define BLACKBOARD__BLACKBOARDINTERFACE_HPP_
 
 #include <map>
+#include <vector>
 #include <memory>
 #include <string>
 
@@ -97,6 +98,7 @@ public:
   virtual bool exist_entry(const std::string & parent_key, const std::string & key) = 0;
   virtual void remove_entry(const std::string & parent_key, const std::string & key) = 0;
   virtual void remove_parent(const std::string & parent_key) = 0;
+  virtual std::vector<std::string> get_key_parents(const std::string & key) = 0;
 };
 
 }  // namespace blackboard
