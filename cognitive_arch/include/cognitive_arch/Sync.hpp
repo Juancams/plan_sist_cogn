@@ -29,16 +29,15 @@ namespace cognitive_arch
 
 class Sync : public rclcpp::Node
 {
-
 public:
-  explicit Sync();
+  Sync();
 
 protected:
   void entriesCallback(const blackboard_msgs::msg::Entry::SharedPtr msg);
 
   rclcpp::Node::SharedPtr node_aux;
   rclcpp::Subscription<blackboard_msgs::msg::Entry>::SharedPtr blackboard_sub_;
-  std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;;
+  std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
 };
 
 }  // namespace cognitive_arch

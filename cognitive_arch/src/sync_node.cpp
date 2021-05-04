@@ -17,9 +17,6 @@
 #include "cognitive_arch/Sync.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-rclcpp::Node::SharedPtr node = nullptr;
-std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
-
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);

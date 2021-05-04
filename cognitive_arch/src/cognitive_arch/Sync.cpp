@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <memory>
+
 #include "cognitive_arch/Sync.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -30,8 +32,9 @@ Sync::Sync()
 {
   node_aux = rclcpp::Node::make_shared("node_aux_sync");
   problem_expert_ = std::make_shared<plansys2::ProblemExpertClient>(node_aux);
-  blackboard_sub_ = create_subscription<blackboard_msgs::msg::Entry>("blackboard", 
-  rclcpp::QoS(100).transient_local(), std::bind(&Sync::entriesCallback, this, _1));
+  blackboard_sub_ = create_subscription<blackboard_msgs::msg::Entry>(
+    "blackboard", rclcpp::QoS(100).transient_local(),
+    std::bind(&Sync::entriesCallback, this, _1));
 }
 
 void

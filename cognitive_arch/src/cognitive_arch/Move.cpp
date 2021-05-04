@@ -78,9 +78,9 @@ Move::on_activate(const rclcpp_lifecycle::State & previous_state)
     };
 
   send_goal_options.result_callback = [this](auto) {
-      client->remove_entry("r2d2", "at");
+      client->remove_entry("r2d2", "place");
       auto entry = blackboard::Entry<std::string>::make_shared(wp_to_navigate);
-      client->add_entry("r2d2", "at", entry->to_base());
+      client->add_entry("r2d2", "place", entry->to_base());
 
       finish(true, 1.0, "Move completed");
     };
