@@ -29,6 +29,7 @@ int main(int argc, char ** argv)
 
   node->declare_parameter("waypoints");
   node->declare_parameter("waypoint_coords");
+  node->declare_parameter("rooms_colors");
 
   if (node->has_parameter("waypoints")) {
     std::vector<std::string> wp_names;
@@ -53,6 +54,15 @@ int main(int argc, char ** argv)
 
         auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(wp_pose);
         client->add_entry(wp, "location", entry->to_base());
+      }
+
+      node->declare_parameter("rooms_colors." + wp);
+
+      std::vector<double> color;
+      if (node->get_parameter_or("rooms_colors." + wp, color, {})) {
+        RCLCPP_INFO(node->get_logger(), "Color %d", color);
+        auto entry_color = blackboard::Entry<std::vector<double>>::make_shared(color);
+        client->add_entry(wp, "color", entry_color->to_base());
       }
     }
   }
