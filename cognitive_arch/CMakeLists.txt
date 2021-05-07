@@ -17,6 +17,10 @@ find_package(lifecycle_msgs REQUIRED)
 find_package(plansys2_executor REQUIRED)
 find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
+
+find_package(message_filters REQUIRED)
 
 set(dependencies
   rclcpp
@@ -32,6 +36,8 @@ set(dependencies
   plansys2_executor
   plansys2_problem_expert
   plansys2_domain_expert
+  sensor_msgs
+  cv_bridge
 )
 
 include_directories(fsm include)
