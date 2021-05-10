@@ -58,10 +58,10 @@ int main(int argc, char ** argv)
 
       node->declare_parameter("rooms_colors." + wp);
 
-      std::vector<double> color;
+      std::string color;
       if (node->get_parameter_or("rooms_colors." + wp, color, {})) {
-        RCLCPP_INFO(node->get_logger(), "Color %d", color);
-        auto entry_color = blackboard::Entry<std::vector<double>>::make_shared(color);
+        RCLCPP_INFO(node->get_logger(), "Color %s", color);
+        auto entry_color = blackboard::Entry<std::string>::make_shared(color);
         client->add_entry(wp, "color", entry_color->to_base());
       }
     }

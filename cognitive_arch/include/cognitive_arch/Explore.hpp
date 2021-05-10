@@ -26,6 +26,7 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
 
 #include "plansys2_executor/ActionExecutorClient.hpp"
 #include "blackboard/BlackBoardNode.hpp"
@@ -49,8 +50,8 @@ public:
   Explore(const std::string & name, const std::chrono::nanoseconds & rate);
 
 protected:
-  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_configure(const rclcpp_lifecycle::State & previous_state);
+  // rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  // on_configure(const rclcpp_lifecycle::State & previous_state);
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_activate(const rclcpp_lifecycle::State & previous_state);
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -69,9 +70,13 @@ private:
   bool first_;
   bool found_;
   bool pose_saved_;
+  int counter_;
   geometry_msgs::msg::PoseStamped ob_pose;
+  std::string object;
+  int counters_[3];
+  int index_;
 
-  blackboard::Entry<std::vector<double>>::Ptr room_color_;
+  blackboard::Entry<std::string>::Ptr room_color_;
   blackboard::Entry<std::string>::Ptr room_;
   rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;

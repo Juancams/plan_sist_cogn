@@ -23,12 +23,7 @@ namespace cognitive_arch
 Explore::Explore(const std::string & name, const std::chrono::nanoseconds & rate)
 : plansys2::ActionExecutorClient(name, rate)
 {
-}
-
-rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-Explore::on_configure(const rclcpp_lifecycle::State & previous_state)
-{
-  return ActionExecutorClient::on_configure(previous_state);
+  memset(&counters_, 0, sizeof(counters_));
 }
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -45,8 +40,7 @@ Explore::on_activate(const rclcpp_lifecycle::State & previous_state)
   client_ = blackboard::BlackBoardClient::make_shared();
 
   room_ = blackboard::as<std::string>(client_->get_entry("r2d2", "place"));
-
-  room_color_ = blackboard::as<std::vector<double>>(client_->get_entry(room_->data_, "color"));
+  room_color_ = blackboard::as<std::string>(client_->get_entry(room_->data_, "color"));
 
   if (room_color_ == nullptr) {
     RCLCPP_ERROR(
@@ -54,8 +48,32 @@ Explore::on_activate(const rclcpp_lifecycle::State & previous_state)
       room_->data_.c_str());
   }
 
-  min_ = cv::Scalar(room_color_->data_[0], room_color_->data_[1], room_color_->data_[2]);
-  max_ = cv::Scalar(room_color_->data_[3], room_color_->data_[4], room_color_->data_[5]);
+  auto node = rclcpp::Node::make_shared("move_param_node");
+
+  node->declare_parameter("colors_values");
+
+  if (node->has_parameter("colors_values")) {
+    node->declare_parameter("colors_values." + room_color_->data_);
+    std::vector<double> values;
+    if (node->get_parameter_or("colors_values." + room_color_->data_, values, {})) {
+      min_ = cv::Scalar(values[0], values[1], values[2]);
+      max_ = cv::Scalar(values[3], values[4], values[5]);
+    }
+  }
+
+  node->declare_parameter("objects");
+  if (node->has_parameter("objects")) {
+    node->declare_parameter("objects." + room_color_->data_);
+    if (node->get_parameter_or("objects." + room_color_->data_, object, {})) {
+      if (object.compare("cereals") == 0) {
+        index_ = 0;
+      } else if (object.compare("ball") == 0) {
+        index_ = 1;
+      } else if (object.compare("apple") == 0) {
+        index_ = 2;
+      }
+    }
+  }
 
   cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
   cmd_vel_pub_->on_activate();
@@ -111,8 +129,13 @@ void Explore::do_work()
 
     cmd_vel_pub_->publish(cmd);
 
-    auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(ob_pose);
-    client_->add_entry("ball", "at", entry->to_base());
+    if (found_) {
+      std::stringstream obj;
+      obj << object << counters_[index_]++;
+
+      auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(ob_pose);
+      client_->add_entry(obj.str(), "at", entry->to_base());
+    }
 
     finish(true, 1.0, "Patrol completed");
   }
@@ -156,7 +179,7 @@ void Explore::cameraCB(const sensor_msgs::msg::Image::SharedPtr image_in)
   }
 
   circle(cv_ptr->image, cv::Point(col_, row_), 4, cv::Scalar(255, 0, 0), -1);
-  cv::imshow("Image", binary);
+  cv::imshow("Image", cv_ptr->image);
   cv::waitKey(3);
 }
 
@@ -175,6 +198,5 @@ void Explore::positionCB(const nav_msgs::msg::Odometry::SharedPtr odometry)
     pose_saved_ = true;
   }
 }
-
 
 }  // namespace cognitive_arch
