@@ -19,6 +19,8 @@ find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(octomap_msgs REQUIRED)
+find_package(octomap REQUIRED)
 
 find_package(message_filters REQUIRED)
 
@@ -38,6 +40,8 @@ set(dependencies
   plansys2_domain_expert
   sensor_msgs
   cv_bridge
+  octomap_msgs
+  octomap
 )
 
 include_directories(fsm include)
@@ -62,7 +66,7 @@ add_executable(sync_node src/sync_node.cpp)
 
 target_link_libraries(explore_action ${PROJECT_NAME})
 target_link_libraries(move_action ${PROJECT_NAME})
-target_link_libraries(blackboard_init ${PROJECT_NAME})
+target_link_libraries(blackboard_init ${PROJECT_NAME} octomap)
 target_link_libraries(sync_node ${PROJECT_NAME})
 
 install(DIRECTORY launch pddl rviz config DESTINATION share/${PROJECT_NAME})
