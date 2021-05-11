@@ -64,10 +64,10 @@ add_executable(move_action src/move_action.cpp)
 add_executable(blackboard_init src/blackboard_init.cpp)
 add_executable(sync_node src/sync_node.cpp)
 
-target_link_libraries(explore_action ${PROJECT_NAME})
-target_link_libraries(move_action ${PROJECT_NAME})
+target_link_libraries(explore_action ${PROJECT_NAME} octomap)
+target_link_libraries(move_action ${PROJECT_NAME} octomap)
 target_link_libraries(blackboard_init ${PROJECT_NAME} octomap)
-target_link_libraries(sync_node ${PROJECT_NAME})
+target_link_libraries(sync_node ${PROJECT_NAME} octomap)
 
 install(DIRECTORY launch pddl rviz config DESTINATION share/${PROJECT_NAME})
 
