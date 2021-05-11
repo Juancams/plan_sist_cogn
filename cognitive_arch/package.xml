@@ -29,6 +29,8 @@
   <depend>plansys2_msgs</depend>
   <depend>blackboard</depend>
   <depend>blackboard_msgs</depend>
+  <depend>octomap_msgs</depend>
+  <depend>octomap</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
