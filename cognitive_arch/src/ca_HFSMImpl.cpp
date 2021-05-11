@@ -173,7 +173,7 @@ public:
       if (executor_client_->getResult().value().success) {
         RCLCPP_INFO(get_logger(), "SUCCESS");
       } else {
-        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
+        problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 bedroom2)"));
         executor_client_->start_plan_execution();
         RCLCPP_INFO(get_logger(), "FAIL");
       }
