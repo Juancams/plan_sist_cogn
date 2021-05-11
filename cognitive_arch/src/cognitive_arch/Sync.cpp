@@ -45,10 +45,6 @@ Sync::entriesCallback(const blackboard_msgs::msg::Entry::SharedPtr msg)
     problem_expert_->addInstance(plansys2::Instance{msg->parent_key.c_str(), msg->key.c_str()});
   }
 
-  if (strcmp(msg->key.c_str(), "at") == 0) {
-    RCLCPP_INFO(get_logger(), "%s->%s", msg->parent_key.c_str(), "location");
-    problem_expert_->addInstance(plansys2::Instance{msg->parent_key.c_str(), "location"});
-  }
 }
 
 }  // namespace cognitive_arch
