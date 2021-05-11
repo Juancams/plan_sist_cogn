@@ -65,36 +65,20 @@ void ca_HFSM::tick()
   std_msgs::msg::String msg;
 
   switch (state_) {
-    case BEDROOM2:
-      Bedroom2_code_iterative();
+    case BATHROOM1:
+      Bathroom1_code_iterative();
 
-      msg.data = "Bedroom2";
+      msg.data = "Bathroom1";
       state_pub_->publish(msg);
 
-      if (Bedroom2_2_Bathroom2()) {
+      if (Bathroom1_2_Rand_room()) {
         deactivateAllDeps();
 
-        state_ = BATHROOM2;
+        state_ = RAND_ROOM;
         state_ts_ = now();
 
-        Bathroom2_activateDeps();
-        Bathroom2_code_once();
-      }
-      break;
-    case TV:
-      Tv_code_iterative();
-
-      msg.data = "Tv";
-      state_pub_->publish(msg);
-
-      if (Tv_2_Kitchen()) {
-        deactivateAllDeps();
-
-        state_ = KITCHEN;
-        state_ts_ = now();
-
-        Kitchen_activateDeps();
-        Kitchen_code_once();
+        Rand_room_activateDeps();
+        Rand_room_code_once();
       }
       break;
     case BATHROOM2:
@@ -113,29 +97,45 @@ void ca_HFSM::tick()
         Bedroom1_code_once();
       }
       break;
-    case BEDROOM1:
-      Bedroom1_code_iterative();
+    case TABLE:
+      Table_code_iterative();
 
-      msg.data = "Bedroom1";
+      msg.data = "Table";
       state_pub_->publish(msg);
 
-      if (Bedroom1_2_Bathroom1()) {
+      if (Table_2_Tv()) {
         deactivateAllDeps();
 
-        state_ = BATHROOM1;
+        state_ = TV;
         state_ts_ = now();
 
-        Bathroom1_activateDeps();
-        Bathroom1_code_once();
+        Tv_activateDeps();
+        Tv_code_once();
       }
       break;
-    case BATHROOM1:
-      Bathroom1_code_iterative();
+    case TV:
+      Tv_code_iterative();
 
-      msg.data = "Bathroom1";
+      msg.data = "Tv";
       state_pub_->publish(msg);
 
-      if (Bathroom1_2_Finished()) {
+      if (Tv_2_Kitchen()) {
+        deactivateAllDeps();
+
+        state_ = KITCHEN;
+        state_ts_ = now();
+
+        Kitchen_activateDeps();
+        Kitchen_code_once();
+      }
+      break;
+    case RAND_ROOM:
+      Rand_room_code_iterative();
+
+      msg.data = "Rand_room";
+      state_pub_->publish(msg);
+
+      if (Rand_room_2_Finished()) {
         deactivateAllDeps();
 
         state_ = FINISHED;
@@ -161,20 +161,36 @@ void ca_HFSM::tick()
         Table_code_once();
       }
       break;
-    case TABLE:
-      Table_code_iterative();
+    case BEDROOM1:
+      Bedroom1_code_iterative();
 
-      msg.data = "Table";
+      msg.data = "Bedroom1";
       state_pub_->publish(msg);
 
-      if (Table_2_Tv()) {
+      if (Bedroom1_2_Bathroom1()) {
         deactivateAllDeps();
 
-        state_ = TV;
+        state_ = BATHROOM1;
         state_ts_ = now();
 
-        Tv_activateDeps();
-        Tv_code_once();
+        Bathroom1_activateDeps();
+        Bathroom1_code_once();
+      }
+      break;
+    case BEDROOM2:
+      Bedroom2_code_iterative();
+
+      msg.data = "Bedroom2";
+      state_pub_->publish(msg);
+
+      if (Bedroom2_2_Bathroom2()) {
+        deactivateAllDeps();
+
+        state_ = BATHROOM2;
+        state_ts_ = now();
+
+        Bathroom2_activateDeps();
+        Bathroom2_code_once();
       }
       break;
     case FINISHED:
@@ -209,11 +225,7 @@ ca_HFSM::deactivateAllDeps()
 }
 
 void
-ca_HFSM::Bedroom2_activateDeps()
-{
-}
-void
-ca_HFSM::Tv_activateDeps()
+ca_HFSM::Bathroom1_activateDeps()
 {
 }
 void
@@ -221,11 +233,15 @@ ca_HFSM::Bathroom2_activateDeps()
 {
 }
 void
-ca_HFSM::Bedroom1_activateDeps()
+ca_HFSM::Table_activateDeps()
 {
 }
 void
-ca_HFSM::Bathroom1_activateDeps()
+ca_HFSM::Tv_activateDeps()
+{
+}
+void
+ca_HFSM::Rand_room_activateDeps()
 {
 }
 void
@@ -233,7 +249,11 @@ ca_HFSM::Initial_activateDeps()
 {
 }
 void
-ca_HFSM::Table_activateDeps()
+ca_HFSM::Bedroom1_activateDeps()
+{
+}
+void
+ca_HFSM::Bedroom2_activateDeps()
 {
 }
 void

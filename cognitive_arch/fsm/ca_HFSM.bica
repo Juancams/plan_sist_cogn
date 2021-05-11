@@ -1,19 +1,21 @@
 <component id="ca_HFSM">
- <state x="-759" initial="false" id="Bedroom2" y="-348"/>
- <state x="-1158" initial="false" id="Tv" y="-348"/>
- <state x="-567" initial="false" id="Bathroom2" y="-348"/>
- <state x="-396" initial="false" id="Bedroom1" y="-354"/>
- <state x="-398" initial="false" id="Bathroom1" y="-494"/>
- <state x="-1152" initial="true" id="Initial" y="-661"/>
- <state x="-1156" initial="false" id="Table" y="-507"/>
- <state x="-397" initial="false" id="Finished" y="-664"/>
- <state x="-960" initial="false" id="Kitchen" y="-346"/>
+ <state id="Bathroom1" y="-565" initial="false" x="-399"/>
+ <state id="Bathroom2" y="-444" initial="false" x="-579"/>
+ <state id="Table" y="-580" initial="false" x="-1154"/>
+ <state id="Tv" y="-442" initial="false" x="-1158"/>
+ <state id="Rand_room" y="-694" initial="false" x="-398"/>
+ <state id="Initial" y="-714" initial="true" x="-1152"/>
+ <state id="Bedroom1" y="-442" initial="false" x="-398"/>
+ <state id="Bedroom2" y="-442" initial="false" x="-771"/>
+ <state id="Finished" y="-820" initial="false" x="-399"/>
+ <state id="Kitchen" y="-442" initial="false" x="-962"/>
  <transition dst="Bathroom1" src="Bedroom1"/>
+ <transition dst="Finished" src="Rand_room"/>
  <transition dst="Kitchen" src="Tv"/>
- <transition dst="Bathroom2" src="Bedroom2"/>
  <transition dst="Table" src="Initial"/>
- <transition dst="Bedroom1" src="Bathroom2"/>
  <transition dst="Tv" src="Table"/>
- <transition dst="Finished" src="Bathroom1"/>
+ <transition dst="Rand_room" src="Bathroom1"/>
+ <transition dst="Bathroom2" src="Bedroom2"/>
  <transition dst="Bedroom2" src="Kitchen"/>
+ <transition dst="Bedroom1" src="Bathroom2"/>
 </component>

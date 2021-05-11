@@ -131,12 +131,16 @@ void Explore::do_work()
 
     if (found_) {
       std::stringstream obj;
+
       obj << object << counters_[index_]++;
 
       auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(ob_pose);
-      client_->add_entry(obj.str(), "at", entry->to_base());
-    }
+      auto entry_loc = blackboard::Entry<std::string>::make_shared(room_->data_.c_str());
 
+      client_->add_entry(obj.str(), "location", entry->to_base());
+      client_->add_entry(obj.str(), "at", entry_loc->to_base());
+  
+    }
     finish(true, 1.0, "Patrol completed");
   }
 }
