@@ -50,8 +50,6 @@ public:
 
 protected:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_configure(const rclcpp_lifecycle::State & previous_state);
-  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_activate(const rclcpp_lifecycle::State & previous_state);
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_deactivate(const rclcpp_lifecycle::State & previous_state);
@@ -69,9 +67,13 @@ private:
   bool first_;
   bool found_;
   bool pose_saved_;
+  int counter_;
   geometry_msgs::msg::PoseStamped ob_pose;
+  std::string object;
+  int counters_[3];
+  int index_;
 
-  blackboard::Entry<std::vector<double>>::Ptr room_color_;
+  blackboard::Entry<std::string>::Ptr room_color_;
   blackboard::Entry<std::string>::Ptr room_;
   rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;

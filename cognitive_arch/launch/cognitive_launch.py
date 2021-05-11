@@ -101,7 +101,7 @@ def generate_launch_description():
         package='cognitive_arch',
         executable='explore_action',
         output='screen',
-        parameters=[])
+        parameters=[os.path.join(package_dir, 'config', 'params.yaml')])
 
     ld = LaunchDescription()
 

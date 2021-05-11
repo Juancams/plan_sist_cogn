@@ -11,10 +11,18 @@ move_param_node:
       tv: [3.5, -0.5, 0.0]
       table: [4.5, 3.0, 0.0]
     rooms_colors:
-      bathroom1: [0.0, 100.0, 0.0, 8.0, 255.0, 255.0] # red
-      bathroom2: [96.0, 108.0, 0.0, 164.0, 255.0, 255.0] # blue
-      bedroom1: [45.0, 114.0, 119.0, 84.0, 255.0, 255.0] # green
-      bedroom2: [0.0, 100.0, 0.0, 8.0, 255.0, 255.0] # red
-      kitchen: [45.0, 114.0, 119.0, 84.0, 255.0, 255.0] # green
-      tv: [96.0, 108.0, 0.0, 164.0, 255.0, 255.0] # blue
-      table: [0.0, 100.0, 0.0, 8.0, 255.0, 255.0] # red
+      bathroom1: "red"
+      bathroom2: "blue"
+      bedroom1: "green"
+      bedroom2: "red"
+      kitchen: "green"
+      tv: "blue"
+      table: "red"
+    colors_values:
+      red: [0.0, 100.0, 0.0, 8.0, 255.0, 255.0]
+      blue: [96.0, 108.0, 0.0, 164.0, 255.0, 255.0]
+      green: [45.0, 114.0, 119.0, 84.0, 255.0, 255.0]
+    objects:
+      red: "cereals"
+      blue: "ball"
+      green: "apple"
