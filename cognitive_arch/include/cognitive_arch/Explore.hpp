@@ -26,7 +26,6 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
-#include "sensor_msgs/msg/point_cloud2.hpp"
 
 #include "plansys2_executor/ActionExecutorClient.hpp"
 #include "blackboard/BlackBoardNode.hpp"
@@ -50,8 +49,6 @@ public:
   Explore(const std::string & name, const std::chrono::nanoseconds & rate);
 
 protected:
-  // rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  // on_configure(const rclcpp_lifecycle::State & previous_state);
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_activate(const rclcpp_lifecycle::State & previous_state);
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
