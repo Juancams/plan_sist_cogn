@@ -77,7 +77,7 @@ Sync::entriesCallback(const blackboard_msgs::msg::Entry::SharedPtr msg)
 
        if (node != nullptr) {
          auto entry_loc = blackboard::Entry<std::string>::make_shared(rooms[i]);
-         client_->add_entry(msg->key, "at", entry_loc->to_base());
+         client_->add_entry(msg->parent_key, "at", entry_loc->to_base());
          break;
        }
     }
