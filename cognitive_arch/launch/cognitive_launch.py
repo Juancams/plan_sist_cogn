@@ -54,7 +54,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(
             get_package_share_directory('plansys2_bringup'),
             'launch',
-            'plansys2_bringup_launch_monolithic.py')),
+            'plansys2_bringup_launch_distributed.py')),
         launch_arguments={
           'model_file':
           package_dir + '/pddl/cognitive_arch_domain.pddl',
@@ -62,14 +62,14 @@ def generate_launch_description():
         }.items()
     )
 
-    webots = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-          os.path.join(os.path.join(robots_dir, 'launch', 'tiago_nodoors.launch.py'))
-        ),
-        launch_arguments={
-          'namespace': namespace
-        }.items()
-    )
+    # webots = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #       os.path.join(os.path.join(robots_dir, 'launch', 'tiago_nodoors.launch.py'))
+    #     ),
+    #     launch_arguments={
+    #       'namespace': namespace
+    #     }.items()
+    # )
 
     rviz_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(
@@ -113,7 +113,7 @@ def generate_launch_description():
 
     # Declare the launch options
     ld.add_action(plansys2_cmd)
-    ld.add_action(webots)
+    # ld.add_action(webots)
     ld.add_action(rviz_cmd)
 
     ld.add_action(blackboard_init_cmd)

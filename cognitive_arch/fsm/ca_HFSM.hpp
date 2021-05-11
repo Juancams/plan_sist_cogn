@@ -34,33 +34,36 @@ public:
   virtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_deactivate(const rclcpp_lifecycle::State & previous_state);
 
-  virtual void Bedroom2_code_iterative() {}
-  virtual void Bedroom2_code_once() {}
-  virtual void Tv_code_iterative() {}
-  virtual void Tv_code_once() {}
-  virtual void Bathroom2_code_iterative() {}
-  virtual void Bathroom2_code_once() {}
-  virtual void Bedroom1_code_iterative() {}
-  virtual void Bedroom1_code_once() {}
   virtual void Bathroom1_code_iterative() {}
   virtual void Bathroom1_code_once() {}
-  virtual void Initial_code_iterative() {}
-  virtual void Initial_code_once() {}
+  virtual void Bathroom2_code_iterative() {}
+  virtual void Bathroom2_code_once() {}
   virtual void Table_code_iterative() {}
   virtual void Table_code_once() {}
+  virtual void Tv_code_iterative() {}
+  virtual void Tv_code_once() {}
+  virtual void Rand_room_code_iterative() {}
+  virtual void Rand_room_code_once() {}
+  virtual void Initial_code_iterative() {}
+  virtual void Initial_code_once() {}
+  virtual void Bedroom1_code_iterative() {}
+  virtual void Bedroom1_code_once() {}
+  virtual void Bedroom2_code_iterative() {}
+  virtual void Bedroom2_code_once() {}
   virtual void Finished_code_iterative() {}
   virtual void Finished_code_once() {}
   virtual void Kitchen_code_iterative() {}
   virtual void Kitchen_code_once() {}
 
   virtual bool Bedroom1_2_Bathroom1() {return false;}
+  virtual bool Rand_room_2_Finished() {return false;}
   virtual bool Tv_2_Kitchen() {return false;}
-  virtual bool Bedroom2_2_Bathroom2() {return false;}
   virtual bool Initial_2_Table() {return false;}
-  virtual bool Bathroom2_2_Bedroom1() {return false;}
   virtual bool Table_2_Tv() {return false;}
-  virtual bool Bathroom1_2_Finished() {return false;}
+  virtual bool Bathroom1_2_Rand_room() {return false;}
+  virtual bool Bedroom2_2_Bathroom2() {return false;}
   virtual bool Kitchen_2_Bedroom2() {return false;}
+  virtual bool Bathroom2_2_Bedroom1() {return false;}
 
 
   void tick();
@@ -70,26 +73,28 @@ protected:
 
 private:
   void deactivateAllDeps();
-  void Bedroom2_activateDeps();
-  void Tv_activateDeps();
-  void Bathroom2_activateDeps();
-  void Bedroom1_activateDeps();
   void Bathroom1_activateDeps();
-  void Initial_activateDeps();
+  void Bathroom2_activateDeps();
   void Table_activateDeps();
+  void Tv_activateDeps();
+  void Rand_room_activateDeps();
+  void Initial_activateDeps();
+  void Bedroom1_activateDeps();
+  void Bedroom2_activateDeps();
   void Finished_activateDeps();
   void Kitchen_activateDeps();
 
 
-  static const int BEDROOM2 = 0;
-  static const int TV = 1;
-  static const int BATHROOM2 = 2;
-  static const int BEDROOM1 = 3;
-  static const int BATHROOM1 = 4;
+  static const int BATHROOM1 = 0;
+  static const int BATHROOM2 = 1;
+  static const int TABLE = 2;
+  static const int TV = 3;
+  static const int RAND_ROOM = 4;
   static const int INITIAL = 5;
-  static const int TABLE = 6;
-  static const int FINISHED = 7;
-  static const int KITCHEN = 8;
+  static const int BEDROOM1 = 6;
+  static const int BEDROOM2 = 7;
+  static const int FINISHED = 8;
+  static const int KITCHEN = 9;
 
 
   int state_;
@@ -101,4 +106,4 @@ private:
 
 }  // namespace cascade_hfsm
 
-#endif  // COGNITIVE_ARCH__FSM__CA_HFSM_HPP_"
+#endif  // COGNITIVE_ARCH__FSM__CA_HFSM_HPP_
