@@ -29,7 +29,7 @@ def generate_launch_description():
     package_dir = get_package_share_directory('cognitive_arch')
     bringup_dir = get_package_share_directory('nav2_bringup')
     namespace = LaunchConfiguration('namespace')
-    robots_dir = get_package_share_directory('robots')
+    # robots_dir = get_package_share_directory('robots')
     rviz_config_file = LaunchConfiguration('rviz_config_file')
     use_rviz = LaunchConfiguration('use_rviz')
 

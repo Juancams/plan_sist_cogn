@@ -51,7 +51,7 @@ set(dependencies
 include_directories(fsm include ${PCL_INCLUDE_DIRS})
 
 link_directories(
-	${PCL_LIBRARY_DIRS}
+  ${PCL_LIBRARY_DIRS}
 )
 add_definitions(${PCL_DEFINITIONS})
 

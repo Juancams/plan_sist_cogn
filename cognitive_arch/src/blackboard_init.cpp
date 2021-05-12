@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
 
   auto node = rclcpp::Node::make_shared("move_param_node");
   auto octomap_pub_ = node->create_publisher<octomap_msgs::msg::Octomap>(
-    "/octomap", rclcpp::QoS(1).transient_local()); 
+    "/octomap", rclcpp::QoS(1).transient_local());
 
   node->declare_parameter("waypoints");
   node->declare_parameter("waypoint_coords");
@@ -75,49 +75,49 @@ int main(int argc, char ** argv)
         client->add_entry(wp, "color", entry_color->to_base());
       }
 
-      node->declare_parameter("rooms_octomaps." + wp);
+      // node->declare_parameter("rooms_octomaps." + wp);
 
-      std::vector<double> room_octomap;
-      if (node->get_parameter_or("rooms_octomaps." + wp, room_octomap, {})) {
+      // std::vector<double> room_octomap;
+      // if (node->get_parameter_or("rooms_octomaps." + wp, room_octomap, {})) {
+      //   octomap::ColorOcTree * octomap_;
 
-        octomap::ColorOcTree * octomap_;
+      //   double voxel_res_;
+      //   node->get_parameter("voxel_resolution", voxel_res_);
 
-        double voxel_res_;
-        node->get_parameter("voxel_resolution", voxel_res_);
+      //   double probHit, probMiss, thresMin, thresMax;
+      //   probHit = 0.7;
+      //   probMiss = 0.4;
+      //   thresMin = 0.12;
+      //   thresMax = 0.97;
 
-        double probHit, probMiss, thresMin, thresMax;
-        probHit = 0.7;
-        probMiss = 0.4;
-        thresMin = 0.12;
-        thresMax = 0.97;
+      //   octomap_ = new octomap::ColorOcTree(voxel_res_);
+      //   octomap_->setProbHit(probHit);
+      //   octomap_->setProbMiss(probMiss);
+      //   octomap_->setClampingThresMin(thresMin);
+      //   octomap_->setClampingThresMax(thresMax);
 
-        octomap_ = new octomap::ColorOcTree(voxel_res_);
-        octomap_->setProbHit(probHit);
-        octomap_->setProbMiss(probMiss);
-        octomap_->setClampingThresMin(thresMin);
-        octomap_->setClampingThresMax(thresMax);
+      //   for (int x = room_octomap[0]; x < room_octomap[3]; x++) {
+      //     for (int y = room_octomap[1]; y < room_octomap[4]; y++) {
+      //       for (int z = room_octomap[2]; z < room_octomap[5]; z++) {
+      //         octomap::point3d endpoint((float) x, (float)y, (float)z);
+      //         octomap_->updateNode(endpoint, true);
+      //       }
+      //     }
+      //   }
 
-        for (int x=room_octomap[0]; x<room_octomap[3]; x++) {
-          for (int y=room_octomap[1]; y<room_octomap[4]; y++) {
-            for (int z=room_octomap[2]; z<room_octomap[5]; z++) {
-              octomap::point3d endpoint ((float) x, (float) y, (float) z);
-              octomap_->updateNode(endpoint, true);
-            }
-          }
-        }
+      // octomap_msgs::msg::Octomap octomap_msg;
+      // octomap_msg.header.frame_id = "map";
+      // // octomap_msg.header.stamp = now;
+      // octomap_msg.binary = false;
+      // octomap_msg.resolution = voxel_res_;
 
-        octomap_msgs::msg::Octomap octomap_msg;
-        octomap_msg.header.frame_id = "map";
-        // octomap_msg.header.stamp = now;
-        octomap_msg.binary = false;
-        octomap_msg.resolution = voxel_res_;
-
-        octomap_msgs::fullMapToMsg(*octomap_, octomap_msg);
-        auto entry_octomap = blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(octomap_msg);
-        client->add_entry(wp, "octomap", entry_octomap->to_base());
-        octomap_pub_->publish(octomap_msg);
-        rclcpp::spin_some(node);
-      }
+      // octomap_msgs::fullMapToMsg(*octomap_, octomap_msg);
+      // auto entry_octomap =
+      //   blackboard::Entry<octomap_msgs::msg::Octomap>::make_shared(octomap_msg);
+      // client->add_entry(wp, "octomap", entry_octomap->to_base());
+      // octomap_pub_->publish(octomap_msg);
+      // rclcpp::spin_some(node);
+      // }
     }
   }
 
