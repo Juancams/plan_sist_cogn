@@ -21,7 +21,9 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(octomap_msgs REQUIRED)
 find_package(octomap REQUIRED)
-
+find_package(pcl_conversions REQUIRED)
+find_package(pcl_ros REQUIRED)
+find_package(PCL REQUIRED)
 find_package(message_filters REQUIRED)
 
 set(dependencies
@@ -42,9 +44,16 @@ set(dependencies
   cv_bridge
   octomap_msgs
   octomap
+  pcl_conversions
+  pcl_ros
 )
 
-include_directories(fsm include)
+include_directories(fsm include ${PCL_INCLUDE_DIRS})
+
+link_directories(
+	${PCL_LIBRARY_DIRS}
+)
+add_definitions(${PCL_DEFINITIONS})
 
 add_library(${PROJECT_NAME} SHARED
   src/cognitive_arch/Explore.cpp
