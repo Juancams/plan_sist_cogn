@@ -13,8 +13,6 @@
 // limitations under the License.
 
 #include <memory>
-#include <stdlib.h>
-#include <time.h>
 
 #include "plansys2_msgs/msg/action_execution_info.hpp"
 
@@ -61,7 +59,6 @@ public:
 
   bool Table_2_Tv()
   {
-    
     if (!executor_client_->execute_and_check_plan() && executor_client_->getResult()) {
       if (executor_client_->getResult().value().success) {
         RCLCPP_INFO(get_logger(), "SUCCESS");
@@ -159,7 +156,6 @@ public:
     //   if (executor_client_->getResult().value().success) {
     //     RCLCPP_INFO(get_logger(), "SUCCESS");
     //   } else {
-        
     //     RCLCPP_INFO(get_logger(), "FAIL");
     //   }
     //   return executor_client_->getResult().value().success;
@@ -190,7 +186,6 @@ public:
     problem_expert_->setGoal(plansys2::Goal("(and(explored table))"));
     if (!executor_client_->start_plan_execution()) {
       problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
-
     }
   }
   void Tv_code_iterative() {}
@@ -200,7 +195,6 @@ public:
     problem_expert_->setGoal(plansys2::Goal("(and(explored tv))"));
     if (!executor_client_->start_plan_execution()) {
       problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 table)"));
-
     }
   }
   void Kitchen_code_iterative() {}
@@ -220,7 +214,6 @@ public:
     problem_expert_->setGoal(plansys2::Goal("(and(explored bedroom2))"));
     if (!executor_client_->start_plan_execution()) {
       problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 kitchen)"));
-
     }
   }
   void Bathroom2_code_iterative() {}
@@ -252,12 +245,14 @@ public:
     // }
   }
   void Rand_room_code_iterative() {}
-  void Rand_room_code_once() 
+  void Rand_room_code_once()
   {
     RCLCPP_INFO(get_logger(), "Bathroom1 explored");
     auto objects = client_->get_key_parents("at");
-    int num = rand() % (objects.size());
-  
+
+    unsigned int seed = time(NULL);
+    int num = rand_r(&seed) % (objects.size());
+
     problem_expert_->setGoal(plansys2::Goal("(and(robot_at r2d2 " + objects[num] + "))"));
     if (!executor_client_->start_plan_execution()) {
       problem_expert_->addPredicate(plansys2::Predicate("(robot_at r2d2 init)"));
@@ -279,7 +274,6 @@ private:
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  srand(time(NULL));
 
   auto my_hfsm = std::make_shared<ca_HFSMImpl>();
 

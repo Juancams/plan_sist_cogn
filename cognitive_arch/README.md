@@ -24,7 +24,7 @@ This is an image of the communication between the nodes and the blackboard
 You can watch the video here
 </p>
 
-[![Watch the video](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/init_cap.png)](https://youtu.be/BttqsvfpFCs)
+[![Watch the video](https://github.com/Juancams/plan_sist_cogn/blob/main/resources/init_cap.png)](https://youtu.be/FdRnKN3Pjto)
 
 ## How to use?
 
