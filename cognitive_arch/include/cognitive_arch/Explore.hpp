@@ -21,6 +21,15 @@
 #include <iostream>
 #include <vector>
 
+#include "pcl_conversions/pcl_conversions.h"
+#include "pcl_ros/transforms.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/buffer_interface.h>
+#include <tf2/buffer_core.h>
+#include "tf2_ros/transform_listener.h"
+#include <pcl/impl/point_types.hpp>
+
 #include "sensor_msgs/msg/image.hpp"
 #include "sensor_msgs/image_encodings.hpp"
 #include "geometry_msgs/msg/twist.hpp"
@@ -58,7 +67,7 @@ private:
   void do_work();
   void cameraCB(const sensor_msgs::msg::Image::SharedPtr image_in);
   void depthCB(const sensor_msgs::msg::Image::SharedPtr image_in);
-  void positionCB(const nav_msgs::msg::Odometry::SharedPtr odometry);
+  void cloudCB(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_in);
 
   float progress_;
   int row_;
@@ -66,9 +75,13 @@ private:
   int distance_;
   bool first_;
   bool found_;
+  bool found_pc;
   bool pose_saved_;
   int counter_;
   geometry_msgs::msg::PoseStamped ob_pose;
+  geometry_msgs::msg::PoseStamped obj_pc;
+  tf2_ros::Buffer buffer_;
+  tf2_ros::TransformListener tfListener;
   std::string object;
   int counters_[3];
   int index_;
@@ -78,7 +91,7 @@ private:
   rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr depth_sub_;
-  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr pos_sub_;
+  rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr cloud_sub_;
   rclcpp::Node::SharedPtr node_;
   blackboard::BlackBoardClient::Ptr client_;
 

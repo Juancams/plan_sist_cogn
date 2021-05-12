@@ -15,13 +15,15 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <cmath>
+#include "tf2/LinearMath/Quaternion.h"
 #include "cognitive_arch/Explore.hpp"
 
 
 namespace cognitive_arch
 {
 Explore::Explore(const std::string & name, const std::chrono::nanoseconds & rate)
-: plansys2::ActionExecutorClient(name, rate)
+: plansys2::ActionExecutorClient(name, rate),  buffer_(this->get_clock()), tfListener(buffer_), found_pc(false)
 {
   memset(&counters_, 0, sizeof(counters_));
 }
@@ -86,9 +88,9 @@ Explore::on_activate(const rclcpp_lifecycle::State & previous_state)
     "/kinect_range/image_depth", rclcpp::SensorDataQoS(),
     std::bind(&Explore::depthCB, this, std::placeholders::_1));
 
-  pos_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-    "/odom", 1, std::bind(&Explore::positionCB, this, std::placeholders::_1));
-
+  cloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+    "/depth_registered/points", rclcpp::SensorDataQoS(), std::bind(&Explore::cloudCB, this, std::placeholders::_1));
+ 
   return ActionExecutorClient::on_activate(previous_state);
 }
 
@@ -129,18 +131,6 @@ void Explore::do_work()
 
     cmd_vel_pub_->publish(cmd);
 
-    if (found_) {
-      std::stringstream obj;
-
-      obj << object << counters_[index_]++;
-
-      auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(ob_pose);
-      auto entry_loc = blackboard::Entry<std::string>::make_shared(room_->data_.c_str());
-
-      client_->add_entry(obj.str(), "location", entry->to_base());
-      client_->add_entry(obj.str(), "at", entry_loc->to_base());
-  
-    }
     finish(true, 1.0, "Patrol completed");
   }
 }
@@ -179,6 +169,7 @@ void Explore::cameraCB(const sensor_msgs::msg::Image::SharedPtr image_in)
   if (counter > 50 && first_ && 280 < col_ && col_ < 320) {
     RCLCPP_INFO(get_logger(), "ENCONTRADO");
     found_ = true;
+    found_pc = false;
     first_ = false;
   }
 
@@ -195,11 +186,89 @@ void Explore::depthCB(const sensor_msgs::msg::Image::SharedPtr image_in)
   }
 }
 
-void Explore::positionCB(const nav_msgs::msg::Odometry::SharedPtr odometry)
+void Explore::cloudCB(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_in)
 {
-  if (found_ && !pose_saved_) {
-    ob_pose.pose = odometry->pose.pose;
-    pose_saved_ = true;
+  if (!found_pc && found_) { 
+    pcl::PCLPointCloud2 pc2;
+    pcl_conversions::toPCL(*cloud_in, pc2);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr map_point_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::fromPCLPointCloud2(pc2, *point_cloud);
+    //while(!buffer_.canTransform("map", point_cloud->header.frame_id, pcl_conversions::fromPCL(point_cloud->header.stamp))){
+    for (int i = 0; i < 20; i++) {
+      try
+      {
+        
+        pcl_ros::transformPointCloud("map", *point_cloud, *map_point_cloud, buffer_);
+      }
+      catch(tf2::TransformException & ex)
+      {
+        RCLCPP_ERROR_STREAM(get_logger(),"Transform error of sensor data: quitting callback");
+        return;
+      }
+    }
+    if(map_point_cloud->height != 1){
+      pcl::PointXYZ point = map_point_cloud->at(row_,col_);
+      
+      obj_pc.pose.position.x = point.x;
+      obj_pc.pose.position.y = point.y;
+      obj_pc.pose.position.z = point.z;
+
+      std::stringstream obj;
+      obj << object << counters_[index_]++;
+
+      auto entry_pc = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(obj_pc);
+      auto loc_room = blackboard::as<geometry_msgs::msg::PoseStamped>(client_->get_entry(room_->data_, "location"));
+
+      ob_pose.pose.position.x = loc_room->data_.pose.position.x;
+      ob_pose.pose.position.y = loc_room->data_.pose.position.y;
+      ob_pose.pose.position.z = loc_room->data_.pose.position.z;
+
+      double angle = atan((ob_pose.pose.position.x - obj_pc.pose.position.x) / (ob_pose.pose.position.y - obj_pc.pose.position.y));
+      RCLCPP_INFO(get_logger(), "Angle %f", angle);
+      RCLCPP_INFO(get_logger(), "pos x %f", ob_pose.pose.position.x);
+      RCLCPP_INFO(get_logger(), "pos x' %f", obj_pc.pose.position.x);
+      RCLCPP_INFO(get_logger(), "pos y %f", ob_pose.pose.position.y);
+      RCLCPP_INFO(get_logger(), "pos y' %f", obj_pc.pose.position.y);
+      if(ob_pose.pose.position.x > obj_pc.pose.position.x) {
+        if(ob_pose.pose.position.y > obj_pc.pose.position.y) {
+          angle = angle + M_PI;
+          RCLCPP_INFO(get_logger(), "Angle2 %f", angle);
+        }
+        else {
+          angle = angle + (3*M_PI)/2;
+          RCLCPP_INFO(get_logger(), "Angle3 %f", angle);
+        }
+      }
+      else {
+        if(ob_pose.pose.position.y > obj_pc.pose.position.y) {
+          angle = angle + M_PI/2;
+          RCLCPP_INFO(get_logger(), "Angle4 %f", angle);
+        }
+      }
+
+      tf2::Quaternion q;
+      q.setRPY(0,0,angle);
+      q=q.normalize();
+
+      
+
+      ob_pose.pose.orientation.x = q[0];
+      ob_pose.pose.orientation.y = q[1];
+      ob_pose.pose.orientation.z = q[2];
+      ob_pose.pose.orientation.w = q[3];
+      
+      auto entry = blackboard::Entry<geometry_msgs::msg::PoseStamped>::make_shared(ob_pose);
+      auto entry_loc = blackboard::Entry<std::string>::make_shared(room_->data_.c_str());
+
+      client_->add_entry(obj.str(), "location", entry->to_base());
+      client_->add_entry(obj.str(), "at", entry_loc->to_base());
+      client_->add_entry(obj.str(), "point", entry_pc->to_base());
+
+      RCLCPP_INFO(get_logger(), "(%f, %f, %f)",point.x,point.y,point.z);
+      found_pc = true;
+    }
+    
   }
 }
 
